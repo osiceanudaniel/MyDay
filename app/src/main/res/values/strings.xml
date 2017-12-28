@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Jurnal</string>
+    <string name="loginEmail">Email</string>
+    <string name="loginPassword">Password</string>
+    <string name="loginBtn">Sign In</string>
+    <string name="loginRegisterLink">No account? Register here</string>
+
+    <string name="registerUsername">Insert username...</string>
+    <string name="registerEmail">Insert email...</string>
+    <string name="registerPassword">Insert password...</string>
+    <string name="registerBtn">Register</string>
+</resources>

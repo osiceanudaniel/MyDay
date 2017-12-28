@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.osiceanudaniel.jurnal.LoginActivity"
+    android:orientation="vertical"
+    android:background="@drawable/background_720"
+    android:paddingLeft="25dp"
+    android:paddingTop="10dp"
+    android:paddingRight="25dp"
+    android:paddingBottom="10dp">
+
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        android:layout_gravity="center"
+        android:paddingTop="25dp"/>
+
+    <EditText
+        android:id="@+id/loginEmailTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="20dp"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="20dp"
+        android:hint="@string/loginEmail"
+        android:background="@drawable/input_fields"
+        android:drawableLeft="@drawable/ic_email"/>
+
+    <EditText
+        android:id="@+id/loginPasswordTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="20dp"
+        android:inputType="textPassword"
+        android:layout_marginTop="30dp"
+        android:hint="@string/loginPassword"
+        android:background="@drawable/input_fields"
+        android:drawableLeft="@drawable/ic_lock"/>
+    <Button
+        android:id="@+id/loginSignInBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loginBtn"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/login_btn_shape"
+        android:textColor="#ffffff"
+        android:textSize="16dp"/>
+    <TextView
+        android:id="@+id/loginRegisterLinkText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loginRegisterLink"
+        android:layout_marginTop="15dp"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:textColor="#A5A9B3"/>
+
+    
+</LinearLayout>
