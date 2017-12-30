@@ -5,9 +5,18 @@
     <string name="loginPassword">Password</string>
     <string name="loginBtn">Sign In</string>
     <string name="loginRegisterLink">No account? Register here</string>
+    <string name="loginProgressTitle">Waiting for login...</string>
+    <string name="loginFailureText">Something went wrong when logging in!</string>
+    <string name="loginFailed">Something went wrong. Retype email and password.</string>
 
     <string name="registerUsername">Insert username...</string>
     <string name="registerEmail">Insert email...</string>
     <string name="registerPassword">Insert password...</string>
     <string name="registerBtn">Register</string>
+    <string name="toastEmptyText">Please complete all fields!</string>
+    <string name="toastSuccReg">Registration successful! :)</string>
+    <string name="registrationProgressTitle">Waiting...</string>
+    <string name="registrationProgressMessage">Waiting for registration to complete</string>
+    <string name="registrationFailureText">Something went wrong at registration!</string>
+    <string name="registrationFailed">Something went wrong. Retype email and password.</string>
 </resources>
