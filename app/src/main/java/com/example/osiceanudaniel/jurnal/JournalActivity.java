@@ -146,6 +146,7 @@ public class JournalActivity extends AppCompatActivity {
 
 		// show the date
 		dateEditText.setText(dateString);
+		String x = "";
 	}
 
 	@Override
