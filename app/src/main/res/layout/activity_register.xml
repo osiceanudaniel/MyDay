@@ -36,7 +36,7 @@
                 android:textSize="20dp"
                 android:inputType="textPersonName"
                 android:layout_marginTop="20dp"
-                android:hint="@string/registerUsername"
+                android:hint="@string/registerUsernameHint"
                 android:background="@drawable/input_fields"
                 android:drawableLeft="@drawable/ic_user"/>
             <EditText
@@ -47,7 +47,7 @@
                 android:textSize="20dp"
                 android:inputType="textEmailAddress"
                 android:layout_marginTop="30dp"
-                android:hint="@string/registerEmail"
+                android:hint="@string/registerEmailHint"
                 android:background="@drawable/input_fields"
                 android:drawableLeft="@drawable/ic_email"/>
 
@@ -59,7 +59,7 @@
                 android:textSize="20dp"
                 android:inputType="textPassword"
                 android:layout_marginTop="30dp"
-                android:hint="@string/registerPassword"
+                android:hint="@string/registerPasswordHint"
                 android:background="@drawable/input_fields"
                 android:drawableLeft="@drawable/ic_lock"/>
             <Button

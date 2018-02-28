@@ -43,11 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		// initialize timer with 0
-		seconds = 0;
-
-		thread = new Thread();
-
 		emailEditText = (EditText) findViewById(R.id.loginEmailTextField);
 		passEditText = (EditText) findViewById(R.id.loginPasswordTextField);
 

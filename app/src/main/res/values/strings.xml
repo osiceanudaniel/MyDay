@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Jurnal</string>
-    <string name="loginEmail">Email</string>
-    <string name="loginPassword">Password</string>
     <string name="loginBtn">Sign In</string>
     <string name="loginRegisterLink">No account? Register here</string>
     <string name="loginProgressTitle">Waiting for login...</string>
     <string name="loginFailureText">Something went wrong when logging in!</string>
     <string name="loginFailed">Something went wrong. Retype email and password.</string>
+    <string name="loginEmailHint">Email</string>
+    <string name="loginPasswordHint">Password</string>
 
-    <string name="registerUsername">Insert username...</string>
-    <string name="registerEmail">Insert email...</string>
-    <string name="registerPassword">Insert password...</string>
+
     <string name="registerBtn">Register</string>
     <string name="toastEmptyText">Please complete all fields!</string>
     <string name="toastSuccReg">Registration successful! :)</string>
@@ -19,4 +17,13 @@
     <string name="registrationProgressMessage">Waiting for registration to complete</string>
     <string name="registrationFailureText">Something went wrong at registration!</string>
     <string name="registrationFailed">Something went wrong. Retype email and password.</string>
+    <string name="registerUsernameHint">Insert Username ...</string>
+    <string name="registerEmailHint">Insert email ...</string>
+    <string name="registerPasswordHint">Insert password ...</string>
+
+    <string name="journalPostBtnText">Save</string>
+
+    <string name="listeningImageButtonTextDown">Starting Listening ...</string>
+    <string name="menuClearText">Clear text</string>
+
 </resources>

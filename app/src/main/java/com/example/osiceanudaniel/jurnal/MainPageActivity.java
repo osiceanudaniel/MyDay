@@ -22,6 +22,20 @@ public class MainPageActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_page);
 
+		//
+
+		Button journalBtn;
+		journalBtn = (Button) findViewById(R.id.journalBtn);
+
+		journalBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainPageActivity.this, JournalActivity.class));
+			}
+		});
+
+		//
+
 		logoutBtn = (Button) findViewById(R.id.logoutBtn);
 
 		authUser = FirebaseAuth.getInstance();
