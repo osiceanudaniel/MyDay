@@ -1,6 +1,7 @@
 package com.example.osiceanudaniel.jurnal;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,11 +15,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -40,7 +43,8 @@ import java.util.Locale;
 public class JournalActivity extends AppCompatActivity {
 
 	private FirebaseAuth authUser;
-	private DatabaseReference databaseReference;
+	private DatabaseReference usersDatabaseReference;
+	private DatabaseReference notesDatabaseReference;
 
 	private String dateString;
 	private ArrayList<String> commands;
@@ -50,6 +54,7 @@ public class JournalActivity extends AppCompatActivity {
 	private ImageButton voiceImageButton;
 	private EditText canvas;
 	private TextView usernameText;
+	private Button saveBtn;
 
 	private SpeechRecognizer speechRecognizer;
 	private Intent speechIntent;
@@ -60,6 +65,10 @@ public class JournalActivity extends AppCompatActivity {
 
 	private AlertDialog.Builder alert;
 	private DialogInterface.OnClickListener dialog;
+    private ProgressDialog savingNotesProgress;
+
+	private String currentUserID;
+	private Date date;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +78,25 @@ public class JournalActivity extends AppCompatActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		authUser = FirebaseAuth.getInstance();
-		String currentUserID = authUser.getUid();
+		currentUserID = authUser.getUid();
+		
 		// reference the username of the current user in the database
-		databaseReference = FirebaseDatabase.getInstance().
+		usersDatabaseReference = FirebaseDatabase.getInstance().
 				getReference("Users/"+currentUserID+"/username");
 
+		// set the notes database reference
+		notesDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notes");
+
 		displayText = "";
+        savingNotesProgress = new ProgressDialog(this);
+        savingNotesProgress.setMessage(getString(R.string.savingNotesProgressText));
 
 		initializeCommandsArray();
 		setDialogConfirmation();
 		checkPermission();
 
 		usernameText = (TextView) findViewById(R.id.usernameEditText);
-		databaseReference.addValueEventListener(new ValueEventListener() {
+		usersDatabaseReference.addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				String username = dataSnapshot.getValue().toString();
@@ -98,6 +113,15 @@ public class JournalActivity extends AppCompatActivity {
 		dateEditText = (TextView) findViewById(R.id.jurnalDateEditText);
 		voiceImageButton = (ImageButton) findViewById(R.id.imageButtonRecord);
 		canvas = (EditText) findViewById(R.id.journalWriteEditText);
+		saveBtn = (Button) findViewById(R.id.journalPostBtn);
+
+		// action when user taps the save button
+		saveBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+                saveNotes();
+			}
+		});
 
 		speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 		speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -211,7 +235,6 @@ public class JournalActivity extends AppCompatActivity {
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		SimpleDateFormat formater;
-		Date date;
 
 		// format the date in a specific way
 		formater = new SimpleDateFormat("MMMM, hh:mm");
@@ -290,5 +313,49 @@ public class JournalActivity extends AppCompatActivity {
 	private void initializeCommandsArray() {
 		commands = new ArrayList<>();
 		Collections.addAll(commands, predefCommands);
+	}
+
+	// save the notes to firebase database
+	private void saveNotes() {
+        savingNotesProgress.show();
+        Log.d("Tag", "SAVING");
+
+        // create user ID level
+        DatabaseReference userIdReference = notesDatabaseReference.child(currentUserID);
+
+        // date
+        SimpleDateFormat formater;
+
+        // format the date in a specific way
+        formater = new SimpleDateFormat("MMMM, hh:mm:ss");
+
+        // transform the date into string
+        dateString = formater.format(date);
+
+        // set child reference to date
+        DatabaseReference dateDatabaseReference = userIdReference.child(dateString);
+
+        // get the text and image form the activity
+        String noteText = canvas.getText().toString();
+        if (!TextUtils.isEmpty(noteText)) {
+            dateDatabaseReference.child("text").setValue(noteText);
+            dateDatabaseReference.child("picture").setValue("picture");
+
+            // confirm the note has been saved
+            Toast.makeText(this, this.getString(R.string.savingNotesConfirmedText),
+                    Toast.LENGTH_SHORT).show();
+
+            // redirect the user
+            Intent i = new Intent(JournalActivity.this, MainPageActivity.class);
+            startActivity(i);
+
+            savingNotesProgress.dismiss();
+
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.toastSave),
+                    Toast.LENGTH_SHORT).show();
+            Log.d("TAG2", "Dismiss");
+            savingNotesProgress.dismiss();
+        }
 	}
 }

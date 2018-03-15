@@ -25,6 +25,9 @@
     <string name="registerPasswordHint">Insert password ...</string>
 
     <string name="journalPostBtnText">Save</string>
+    <string name="toastSave">Please write a few words</string>
+    <string name="savingNotesProgressText">Saving note</string>
+    <string name="savingNotesConfirmedText">Note saved</string>
 
     <string name="listeningImageButtonTextDown">Starting Listening ...</string>
     <string name="menuClearText">Clear text</string>
