@@ -2,27 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.example.osiceanudaniel.jurnal.MainPageActivity"
     android:orientation="vertical"
-    android:paddingLeft="25dp"
-    android:paddingTop="10dp"
-    android:paddingRight="25dp"
-    android:paddingBottom="10dp"
-    android:background="@color/colorAccent">
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginBottom="10dp"
+    android:background="#F1F1F1">
 
-    <Button
-        android:id="@+id/logoutBtn"
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="logut"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:layout_marginTop="50dp"
-        android:id="@+id/journalBtn"
-        android:text="Journal Activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

@@ -2,8 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
     <item android:id="@+id/clearTextMenu"
         android:title="@string/menuClearText"
         android:icon="@mipmap/ic_clear_white_24dp"

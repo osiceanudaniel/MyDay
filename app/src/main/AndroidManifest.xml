@@ -3,6 +3,7 @@
     package="com.example.osiceanudaniel.jurnal">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -13,7 +14,8 @@
         android:theme="@style/MyTheme">
         <activity
             android:name=".MainPageActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MyThemeActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +31,8 @@
         <activity
             android:name=".JournalActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyThemeActionBar"/>
+            android:theme="@style/MyThemeActionBar"
+            android:parentActivityName=".MainPageActivity"/>
     </application>
 
 </manifest>

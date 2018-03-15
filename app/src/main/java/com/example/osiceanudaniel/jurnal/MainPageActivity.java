@@ -2,16 +2,17 @@ package com.example.osiceanudaniel.jurnal;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainPageActivity extends AppCompatActivity {
-
-	private Button logoutBtn;
 
 	private FirebaseAuth authUser;
 
@@ -22,31 +23,7 @@ public class MainPageActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_page);
 
-		//
-
-		Button journalBtn;
-		journalBtn = (Button) findViewById(R.id.journalBtn);
-
-		journalBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(MainPageActivity.this, JournalActivity.class));
-			}
-		});
-
-		//
-
-		logoutBtn = (Button) findViewById(R.id.logoutBtn);
-
 		authUser = FirebaseAuth.getInstance();
-
-		logoutBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				logoutUser();
-			}
-		});
 
 		authUserListener = new FirebaseAuth.AuthStateListener() {
 			@Override
@@ -64,10 +41,45 @@ public class MainPageActivity extends AppCompatActivity {
 		authUser.signOut();
 	}
 
+	private void createNote() {
+        startActivity(new Intent(MainPageActivity.this, JournalActivity.class));
+    }
+
+    private void displayAboutText() {
+        AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
+        infoDialog.setTitle(this.getString(R.string.aboutTitle));
+        infoDialog.setMessage(this.getString(R.string.aboutText));
+        infoDialog.show();
+    }
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 
 		authUser.addAuthStateListener(authUserListener);
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.mainpage_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+	    switch (item.getItemId()) {
+            case R.id.logoutMenu:
+                logoutUser();
+                break;
+            case R.id.createNoteMenu:
+                createNote();
+                break;
+            case R.id.aboutMenu:
+                displayAboutText();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

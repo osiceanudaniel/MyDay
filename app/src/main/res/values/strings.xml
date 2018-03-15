@@ -8,6 +8,9 @@
     <string name="loginFailed">Something went wrong. Retype email and password.</string>
     <string name="loginEmailHint">Email</string>
     <string name="loginPasswordHint">Password</string>
+    <string name="logoutMenuItemName">Logout</string>
+    <string name="createPostMenu">Create post</string>
+    <string name="aboutMenu">About</string>
 
 
     <string name="registerBtn">Register</string>
@@ -25,5 +28,12 @@
 
     <string name="listeningImageButtonTextDown">Starting Listening ...</string>
     <string name="menuClearText">Clear text</string>
+    <string name="canvasHintText">Write your thoughts here...</string>
+    <string name="alertClearTextDialogMessage">Are you sure you want to clear text?</string>
+    <string name="alertClearTextYesOption">Yes</string>
+    <string name="alertClearTextNoOption">No</string>
+
+    <string name="aboutTitle">About this app</string>
+    <string name="aboutText">About the app text!</string>
 
 </resources>

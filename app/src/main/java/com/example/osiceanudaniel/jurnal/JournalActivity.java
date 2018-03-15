@@ -1,7 +1,7 @@
 package com.example.osiceanudaniel.jurnal;
 
-import android.*;
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,8 +11,10 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,29 +22,78 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
 public class JournalActivity extends AppCompatActivity {
 
+	private FirebaseAuth authUser;
+	private DatabaseReference databaseReference;
+
 	private String dateString;
+	private ArrayList<String> commands;
+	private final String[] predefCommands = {"command clear", "command save"};
 
 	private TextView dateEditText;
 	private ImageButton voiceImageButton;
 	private EditText canvas;
+	private TextView usernameText;
 
 	private SpeechRecognizer speechRecognizer;
 	private Intent speechIntent;
+
+	private String displayText;
+
+	private MenuItem clearAllMenu;
+
+	private AlertDialog.Builder alert;
+	private DialogInterface.OnClickListener dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_journal);
 
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		authUser = FirebaseAuth.getInstance();
+		String currentUserID = authUser.getUid();
+		// reference the username of the current user in the database
+		databaseReference = FirebaseDatabase.getInstance().
+				getReference("Users/"+currentUserID+"/username");
+
+		displayText = "";
+
+		initializeCommandsArray();
+		setDialogConfirmation();
 		checkPermission();
+
+		usernameText = (TextView) findViewById(R.id.usernameEditText);
+		databaseReference.addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(DataSnapshot dataSnapshot) {
+				String username = dataSnapshot.getValue().toString();
+				usernameText.setText(username);
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+
+			}
+		});
+
 
 		dateEditText = (TextView) findViewById(R.id.jurnalDateEditText);
 		voiceImageButton = (ImageButton) findViewById(R.id.imageButtonRecord);
@@ -92,7 +143,34 @@ public class JournalActivity extends AppCompatActivity {
 				// if it recognized something, get the first result that is the best match
 				// and display it
 				if(!result.isEmpty()) {
-					canvas.setText(result.get(0));
+					boolean notCommand = true;
+
+					// check if user said a command
+					String com = result.get(0).toLowerCase();
+					for(int i = 0; i < commands.size(); i++) {
+						if (com.equals(commands.get(i))) {
+							// mark that it is a command and don't display it
+							notCommand = false;
+							switch (com) {
+								case "command clear":
+									alert.show();
+									break;
+								case "command save":
+									Toast.makeText(getApplicationContext(),"save",Toast.LENGTH_LONG).show();
+									break;
+							}
+						}
+					}
+					// first check if user said a command
+					if(notCommand) {
+
+						displayText = canvas.getText().toString();
+						displayText += " " + result.get(0);
+						canvas.setText(displayText);
+					}
+				} else {
+					displayText = canvas.getText().toString();
+					canvas.setText(displayText);
 				}
 			}
 
@@ -113,7 +191,6 @@ public class JournalActivity extends AppCompatActivity {
 
 				switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN :
-						canvas.setText("");
 						canvas.setHint(R.string.listeningImageButtonTextDown);
 						speechRecognizer.startListening(speechIntent);
 						break;
@@ -137,7 +214,7 @@ public class JournalActivity extends AppCompatActivity {
 		Date date;
 
 		// format the date in a specific way
-		formater = new SimpleDateFormat("dd/MM/yyyy, hh:mm:ss aaa");
+		formater = new SimpleDateFormat("MMMM, hh:mm");
 		// get the current date
 		date = new Date();
 
@@ -153,9 +230,22 @@ public class JournalActivity extends AppCompatActivity {
 		// show the menu items
 		getMenuInflater().inflate(R.menu.journal_menu, menu);
 
+		clearAllMenu = menu.findItem(R.id.clearTextMenu);
+
+		clearAllMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem menuItem) {
+				// show the alert box to choose yes or no
+				alert.show();
+
+				return false;
+			}
+		});
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	// check mic permission
 	private void checkPermission() {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if(!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -166,5 +256,39 @@ public class JournalActivity extends AppCompatActivity {
 				finish();
 			}
 		}
+	}
+
+	// set the behaviour of the clear text dialog box
+	private void setDialogConfirmation() {
+		dialog = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				// get the text from the canvas first
+				displayText = canvas.getText().toString();
+
+				// set yes or no behaviour for options
+				switch (i) {
+					case DialogInterface.BUTTON_POSITIVE:
+						displayText = "";
+						canvas.setText(displayText);
+						canvas.setHint(R.string.canvasHintText);
+
+						break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						canvas.setText(displayText);
+
+						break;
+				}
+			}
+		};
+		alert = new AlertDialog.Builder(this);
+		alert.setMessage(R.string.alertClearTextDialogMessage).setPositiveButton(R.string.alertClearTextYesOption, dialog).
+				setNegativeButton(R.string.alertClearTextNoOption,dialog);
+	}
+
+	// initialize the array list of vocal commands
+	private void initializeCommandsArray() {
+		commands = new ArrayList<>();
+		Collections.addAll(commands, predefCommands);
 	}
 }

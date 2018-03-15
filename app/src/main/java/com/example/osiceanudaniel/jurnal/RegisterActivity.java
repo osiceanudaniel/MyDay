@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -28,12 +31,15 @@ public class RegisterActivity extends AppCompatActivity {
 	private FirebaseAuth authUser;
 	private FirebaseAuth.AuthStateListener authUserListener;
 
+	private DatabaseReference databaseReference;
+
 	private ProgressDialog registrationProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+
 
 		// getting the views from XML
 		usernameEditText = (EditText) findViewById(R.id.registerUsernameTextField);
@@ -46,11 +52,16 @@ public class RegisterActivity extends AppCompatActivity {
 		emailEditText.setText("");
 		passEditText.setText("");
 
+		// get the instance of current user
 		authUser = FirebaseAuth.getInstance();
 
+		// save info about current user in the database in the child Users
+		databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+
 		registrationProgress = new ProgressDialog(RegisterActivity.this);
-		registrationProgress.setTitle("" + R.string.registrationProgressTitle);
-		registrationProgress.setMessage("" + R.string.registrationProgressMessage);
+
+		registrationProgress.setTitle(this.getString(R.string.registrationProgressTitle));
+		registrationProgress.setMessage(this.getString(R.string.registrationProgressMessage));
 
 		// listen if the user taps register button
 		signupBtn.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 	// check if fields are not empty
 	private boolean checkEditText(String username, String email, String password) {
-		if(email.equals("") || password.equals("")) {
+		if(TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
 
 			return false;
 		}
@@ -103,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
 	}
 
 	// try to register the user
-	private void registerUser(String username, String email, String password) {
+	private void registerUser(final String username, String email, String password) {
 
 		authUser.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 			@Override
@@ -111,6 +122,16 @@ public class RegisterActivity extends AppCompatActivity {
 
 				// if the registration was successful
 				if(task.isSuccessful()) {
+
+					// get the id of the current user
+					String currentUserID = authUser.getCurrentUser().getUid();
+
+					// set another child to store username and profile picture
+					DatabaseReference dataToCurrentUser = databaseReference.child(currentUserID);
+
+					// complete data for current user
+					dataToCurrentUser.child("username").setValue(username);
+					dataToCurrentUser.child("image").setValue("picture");
 
 					Toast.makeText(RegisterActivity.this, R.string.toastSuccReg, Toast.LENGTH_SHORT).show();
 

@@ -1,66 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.osiceanudaniel.jurnal.JournalActivity"
-    android:orientation="vertical">
+    android:fillViewport="true"
+    tools:context="com.example.osiceanudaniel.jurnal.JournalActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:weightSum="7.5">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_marginBottom="1dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="6"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
+            <TextView
+                android:id="@+id/usernameEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:text=""
+                android:layout_gravity="left"
+                android:textColor="#A0A0A0"
+                android:textSize="15dp" />
 
-                <TextView
-                    android:id="@+id/currentDay"
-                    android:layout_width="16dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:inputType="text"
-                    android:text="Username"
-                    android:textColor="#A0A0A0"
-                    android:textSize="15dp" />
+            <ImageButton
+                android:id="@+id/imageButtonRecord"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_record_voice_over_black_24dp"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:layout_weight="1"/>
 
-                <ImageButton
-                    android:id="@+id/imageButtonRecord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_record_voice_over_black_24dp"
-                    android:background="#fff"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/jurnalDateEditText"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="right"
+                android:inputType="datetime"
+                android:singleLine="false"
+                android:text="Date"
+                android:textColor="#A0A0A0"
+                android:textSize="15dp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/jurnalDateEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="right"
-                    android:inputType="datetime"
-                    android:singleLine="false"
-                    android:text="Date"
-                    android:textColor="#A0A0A0"
-                    android:textSize="15dp" />
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="6">
 
             <EditText
                 android:id="@+id/journalWriteEditText"
@@ -71,19 +78,29 @@
                 android:gravity="top|left"
                 android:inputType="textMultiLine"
                 android:padding="5dp"
+                android:hint="@string/canvasHintText"
                 android:scrollbars="vertical"
                 android:textSize="18dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/journalPostBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/login_btn_shape"
                 android:text="@string/journalPostBtnText"
                 android:textColor="#ffffff"
                 android:textSize="16dp" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
