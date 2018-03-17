@@ -2,6 +2,8 @@ package com.example.osiceanudaniel.jurnal;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -19,8 +22,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    // settin the request code for image request
+    private final static int IMGE_REQUEST_CODE = 10;
+
+    private Uri imageUri;
 
 	private EditText usernameEditText;
 	private EditText emailEditText;
@@ -35,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 	private ProgressDialog registrationProgress;
 
+	private ImageView profileImage;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,6 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
 		passEditText = (EditText) findViewById(R.id.registerPasswordTextField);
 
 		signupBtn = (Button) findViewById(R.id.registerBtn);
+
+		profileImage = (ImageView) findViewById(R.id.circleImageViewRegister);
 
 		usernameEditText.setText("");
 		emailEditText.setText("");
@@ -62,6 +76,17 @@ public class RegisterActivity extends AppCompatActivity {
 
 		registrationProgress.setTitle(this.getString(R.string.registrationProgressTitle));
 		registrationProgress.setMessage(this.getString(R.string.registrationProgressMessage));
+
+		// setting the listener for profile image view
+		profileImage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent imageI = new Intent(Intent.ACTION_GET_CONTENT);
+				// can choose an image with any extension
+                imageI.setType("image/*");
+				startActivityForResult(imageI, IMGE_REQUEST_CODE);
+			}
+		});
 
 		// listen if the user taps register button
 		signupBtn.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +128,40 @@ public class RegisterActivity extends AppCompatActivity {
 		};
 	}
 
-	// check if fields are not empty
+	// override this method to get the image from gallery
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check the request
+        if(requestCode == IMGE_REQUEST_CODE && resultCode == RESULT_OK) {
+            // get the image path
+            imageUri = data.getData();
+
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setBorderLineColor(Color.RED)
+                    .setGuidelinesColor(Color.GREEN)
+                    .setFixAspectRatio(true)
+                    .setBackgroundColor(Color.parseColor("#8010b6cd"))
+                    .start(this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri cropedPictureUri = result.getUri();
+
+                // set the profile picture to be the cropped image
+                profileImage.setImageURI(cropedPictureUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    // check if fields are not empty
 	private boolean checkEditText(String username, String email, String password) {
 		if(TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
 

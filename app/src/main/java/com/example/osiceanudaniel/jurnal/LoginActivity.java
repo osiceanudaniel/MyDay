@@ -34,10 +34,6 @@ public class LoginActivity extends AppCompatActivity {
 
 	private ProgressDialog progressLogin;
 
-	private Thread thread;
-
-	private int seconds;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
 					// redirect the user
 					Intent mainPageIntent = new Intent(LoginActivity.this, MainPageActivity.class);
+					mainPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(mainPageIntent);
 
 					// dismiss the progress bar
@@ -123,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
 					// dismiss the progress bar
 					progressLogin.dismiss();
+					passEditText.setText("");
 
 					Toast.makeText(LoginActivity.this, R.string.loginFailed, Toast.LENGTH_LONG).show();
 				}
@@ -130,6 +128,13 @@ public class LoginActivity extends AppCompatActivity {
 			}
 		});
 	}
+
+    public void onBackPressed(){
+        Intent exit = new Intent(Intent.ACTION_MAIN);
+        exit.addCategory(Intent.CATEGORY_HOME);
+        exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(exit);
+    }
 
 
 }

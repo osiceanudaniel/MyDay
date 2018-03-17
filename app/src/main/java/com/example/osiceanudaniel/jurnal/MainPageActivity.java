@@ -9,14 +9,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainPageActivity extends AppCompatActivity {
 
-	private FirebaseAuth authUser;
+	private TextView usernameText;
 
+	private FirebaseAuth authUser;
 	private FirebaseAuth.AuthStateListener authUserListener;
+	private DatabaseReference userDatabaseReference;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,24 @@ public class MainPageActivity extends AppCompatActivity {
 				}
 			}
 		};
+
+		usernameText = (TextView) findViewById(R.id.usernameMainActivity);
+		String userID = authUser.getUid();
+        userDatabaseReference = FirebaseDatabase.getInstance().
+                getReference("Users/"+userID+"/username");
+        userDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.getValue().toString();
+                usernameText.setText(username);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 	}
 
 	private void logoutUser() {
@@ -82,4 +108,11 @@ public class MainPageActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+	public void onBackPressed(){
+		Intent exit = new Intent(Intent.ACTION_MAIN);
+		exit.addCategory(Intent.CATEGORY_HOME);
+		exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(exit);
+	}
 }

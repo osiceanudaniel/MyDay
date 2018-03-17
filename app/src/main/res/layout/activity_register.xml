@@ -21,12 +21,28 @@
             android:paddingRight="25dp"
             android:paddingBottom="10dp">
 
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/logo"
-                android:layout_gravity="center" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageViewRegister"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/profile"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/secondCircleImageView"
+                    android:layout_width="152dp"
+                    android:layout_height="152dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:background="@drawable/image_stroke"/>
+            </RelativeLayout>
 
             <EditText
                 android:id="@+id/registerUsernameTextField"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Jurnal</string>
+    <string name="app_name">MyDay</string>
     <string name="loginBtn">Sign In</string>
     <string name="loginRegisterLink">No account? Register here</string>
     <string name="loginProgressTitle">Waiting for login...</string>
@@ -38,5 +38,14 @@
 
     <string name="aboutTitle">About this app</string>
     <string name="aboutText">About the app text!</string>
+    <string name="randomBgText">
+        You dont want to become guilty of pla gia rism
+        by letting someone else s words get inad vert
+        ently mixed in with your own. If you do feel the
+        need to paste in a block of rese arch while youre
+        writing, be sure to high light the copied text in a
+        diff erent color so you can go back and remove or rewrite
+        it ent irely later.
+    </string>
 
 </resources>
