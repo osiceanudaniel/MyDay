@@ -41,6 +41,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="25dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:background="@drawable/image_stroke"/>
             </RelativeLayout>
 
@@ -62,7 +63,7 @@
                 android:padding="10dp"
                 android:textSize="20dp"
                 android:inputType="textEmailAddress"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:hint="@string/registerEmailHint"
                 android:background="@drawable/input_fields"
                 android:drawableLeft="@drawable/ic_email"/>
@@ -74,8 +75,20 @@
                 android:padding="10dp"
                 android:textSize="20dp"
                 android:inputType="textPassword"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:hint="@string/registerPasswordHint"
+                android:background="@drawable/input_fields"
+                android:drawableLeft="@drawable/ic_lock"/>
+
+            <EditText
+                android:id="@+id/registerPasswordValidationTextField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="20dp"
+                android:inputType="textPassword"
+                android:layout_marginTop="10dp"
+                android:hint="@string/registerPasswordValidationHint"
                 android:background="@drawable/input_fields"
                 android:drawableLeft="@drawable/ic_lock"/>
             <Button
@@ -83,8 +96,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/registerBtn"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="43dp"
                 android:background="@drawable/login_btn_shape"
+                android:foreground="?attr/selectableItemBackground"
                 android:textColor="#ffffff"
                 android:textSize="16dp"/>
 

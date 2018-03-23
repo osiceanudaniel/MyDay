@@ -7,4 +7,9 @@
         android:icon="@mipmap/ic_clear_white_24dp"
         app:showAsAction="always"></item>
 
+    <item android:id="@+id/saveMenuButton"
+        android:title="@string/savingNoteMenuTitle"
+        android:icon="@mipmap/ic_done_white_24dp"
+        app:showAsAction="always"></item>
+
 </menu>

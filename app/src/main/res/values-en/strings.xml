@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyDay</string>
+    <string name="loginBtn">Sign In</string>
+    <string name="loginRegisterLink">No account? Register here</string>
+    <string name="loginProgressTitle">Waiting for login ...</string>
+    <string name="loginFailureText">Something went wrong when trying to login!</string>
+    <string name="loginFailed">Something went wrong. Retype email and password!</string>
+    <string name="loginEmailHint">Email</string>
+    <string name="loginPasswordHint">Password</string>
+    <string name="logoutMenuItemName">Logout</string>
+    <string name="createPostMenu">Create note</string>
+    <string name="aboutMenu">About</string>
+
+
+    <string name="registerBtn">Register</string>
+    <string name="toastEmptyText">Complete all the fields!</string>
+    <string name="toastSuccReg">Registration successful! :)</string>
+    <string name="registrationProgressTitle">Waiting ...</string>
+    <string name="registrationProgressMessage">Waiting for registration to complete</string>
+    <string name="registrationFailureText">Something went wrong when trying to register!</string>
+    <string name="registrationFailed">Something went wrong. Retype email and password!</string>
+    <string name="registerUsernameHint">Username ...</string>
+    <string name="registerEmailHint">Email ...</string>
+    <string name="registerPasswordHint">Password ...</string>
+    <string name="registerPasswordValidationHint">Retype password ...</string>
+
+    <string name="journalPostBtnText">Saving</string>
+    <string name="toastSave">Write something before saving!</string>
+    <string name="savingNotesProgressText">Note saving ...</string>
+    <string name="savingNotesConfirmedText">Note saved</string>
+    <string name="savingNoteMenuTitle">Save note</string>
+
+    <string name="listeningImageButtonTextDown">Listening ...</string>
+    <string name="menuClearText">Clear text</string>
+    <string name="canvasHintText">Write your thoughts here ...</string>
+    <string name="alertClearTextDialogMessage">Are you sure you want to clear text?</string>
+    <string name="alertClearTextYesOption">Yes</string>
+    <string name="alertClearTextNoOption">No</string>
+    <string name="toastPasswordDontMatch">Passwords do not match!</string>
+    <string name="toastSelectAProfilePicture">Choose a profile picture!</string>
+    <string name="toastPasswordTooShort">Password too short. Insert at least 8 characters!</string>
+
+    <string name="aboutTitle">About</string>
+    <string name="aboutText">About this app text!</string>
+    <string name="randomBgText">
+        You dont want to become guilty of pla gia rism
+        by letting someone else s words get inad vert
+        ently mixed in with your own. If you do feel the
+        need to paste in a block of rese arch while youre
+        writing, be sure to high light the copied text in a
+        diff erent color so you can go back and remove or rewrite
+        it ent irely later.
+    </string>
+
+    <string name="confirmRecordPermission">
+        You need to provide record audio permission.
+        Do you allow the application to record audio?
+    </string>
+    <string name="confirmCameraPermission">
+        You need to provide camera permission.
+        Do you allow the application to take pictures?
+    </string>
+
+</resources>

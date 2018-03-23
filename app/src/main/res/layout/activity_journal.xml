@@ -13,14 +13,14 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="10dp"
-        android:weightSum="7.5">
+        android:layout_marginTop="10dp">
+        <!--android:weightSum="7.5"-->
 
+        <!--android:layout_weight=".5"-->
+        <!--android:weightSum="3"-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:weightSum="3"
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -34,7 +34,8 @@
                 android:background="@android:color/transparent"
                 android:inputType="text"
                 android:text=""
-                android:layout_gravity="left"
+                android:gravity="left"
+                android:layout_gravity="left|center_vertical"
                 android:textColor="#A0A0A0"
                 android:textSize="15dp" />
 
@@ -44,7 +45,8 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_record_voice_over_black_24dp"
                 android:background="@null"
-                android:layout_gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_gravity="center|center_vertical"
                 android:layout_weight="1"/>
 
             <TextView
@@ -53,6 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:layout_gravity="right|center_vertical"
                 android:gravity="right"
                 android:inputType="datetime"
                 android:singleLine="false"
@@ -63,17 +66,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="280dp"
             android:orientation="vertical"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_weight="6">
+            android:layout_marginBottom="1dp">
+>
 
             <EditText
                 android:id="@+id/journalWriteEditText"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
                 android:background="@drawable/edit_text_stroke"
                 android:gravity="top|left"
                 android:inputType="textMultiLine"
@@ -83,24 +85,55 @@
                 android:textSize="18dp" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edit_text_stroke">
 
-            <Button
-                android:id="@+id/journalPostBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/login_btn_shape"
-                android:text="@string/journalPostBtnText"
-                android:textColor="#ffffff"
-                android:textSize="16dp" />
-        </LinearLayout>
+            <!--<Button-->
+            <!--android:id="@+id/journalPostBtn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/login_btn_shape"-->
+            <!--android:text="@string/journalPostBtnText"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="16dp" />-->
+            <ImageView
+                android:id="@+id/PictureImageView"
+                android:layout_width="200dp"
+                android:layout_height="135dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@mipmap/add_btn" />
+
+            <ImageView
+                android:id="@+id/CameraFrameImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="31dp"
+                android:layout_marginStart="31dp"
+                android:layout_toEndOf="@+id/PictureImageView"
+                android:layout_toRightOf="@+id/PictureImageView"
+                android:background="@drawable/jurnal_image_stroke" />
+
+            <ImageButton
+                android:id="@+id/CameraImageButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignLeft="@+id/CameraFrameImageView"
+                android:layout_alignStart="@+id/CameraFrameImageView"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@mipmap/ic_camera_black_48dp" />
+
+        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

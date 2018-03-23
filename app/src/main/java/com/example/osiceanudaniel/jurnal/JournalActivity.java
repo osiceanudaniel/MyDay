@@ -5,13 +5,18 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,16 +29,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,19 +56,26 @@ import java.util.Locale;
 
 public class JournalActivity extends AppCompatActivity {
 
+	private final String[] predefCommands = {"command clear", "command save"};
+	private final static int IMAGE_GALLERY_REQUEST_CODE = 20;
+	private final static int CAMERA_REQUEST_CODE = 30;
+	private final static int RECORD_AUDIO_REQUEST_CODE = 40;
+
 	private FirebaseAuth authUser;
 	private DatabaseReference usersDatabaseReference;
-	private DatabaseReference notesDatabaseReference;
+	private StorageReference mainStorageReference;
 
+	private DatabaseReference notesDatabaseReference;
 	private String dateString;
 	private ArrayList<String> commands;
-	private final String[] predefCommands = {"command clear", "command save"};
+    private Uri imageURI;
 
 	private TextView dateEditText;
 	private ImageButton voiceImageButton;
 	private EditText canvas;
 	private TextView usernameText;
-	private Button saveBtn;
+	private ImageView displayPicture;
+	private ImageButton cameraImageButton;
 
 	private SpeechRecognizer speechRecognizer;
 	private Intent speechIntent;
@@ -62,6 +83,7 @@ public class JournalActivity extends AppCompatActivity {
 	private String displayText;
 
 	private MenuItem clearAllMenu;
+	private MenuItem saveMenu;
 
 	private AlertDialog.Builder alert;
 	private DialogInterface.OnClickListener dialog;
@@ -70,15 +92,31 @@ public class JournalActivity extends AppCompatActivity {
 	private String currentUserID;
 	private Date date;
 
+	private int permissionCamera;
+	private int permissionAudio;
+	private int permissionStorage;
+
+    private String mCurrentPhotoPath;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_journal);
 
+		// get the permissions first
+        permissionCamera = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+        permissionAudio = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+        permissionStorage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		authUser = FirebaseAuth.getInstance();
 		currentUserID = authUser.getUid();
+		mainStorageReference = FirebaseStorage.getInstance().getReference();
 		
 		// reference the username of the current user in the database
 		usersDatabaseReference = FirebaseDatabase.getInstance().
@@ -93,7 +131,6 @@ public class JournalActivity extends AppCompatActivity {
 
 		initializeCommandsArray();
 		setDialogConfirmation();
-		checkPermission();
 
 		usernameText = (TextView) findViewById(R.id.usernameEditText);
 		usersDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -113,15 +150,33 @@ public class JournalActivity extends AppCompatActivity {
 		dateEditText = (TextView) findViewById(R.id.jurnalDateEditText);
 		voiceImageButton = (ImageButton) findViewById(R.id.imageButtonRecord);
 		canvas = (EditText) findViewById(R.id.journalWriteEditText);
-		saveBtn = (Button) findViewById(R.id.journalPostBtn);
+		displayPicture = (ImageView) findViewById(R.id.PictureImageView);
+		cameraImageButton = (ImageButton) findViewById(R.id.CameraImageButton);
 
-		// action when user taps the save button
-		saveBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-                saveNotes();
-			}
-		});
+		displayPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (permissionStorage != PackageManager.PERMISSION_GRANTED) {
+                    askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, IMAGE_GALLERY_REQUEST_CODE);
+                } else {
+                    chooseSetImage();
+                }
+            }
+        });
+
+		cameraImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //checkCameraPermission();
+                if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
+                    askForPermission(Manifest.permission.CAMERA,CAMERA_REQUEST_CODE);
+                } else if (permissionStorage != PackageManager.PERMISSION_GRANTED) {
+                    askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,IMAGE_GALLERY_REQUEST_CODE);
+                } else {
+                    capturePhoto();
+                }
+            }
+        });
 
 		speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 		speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -212,22 +267,37 @@ public class JournalActivity extends AppCompatActivity {
 		voiceImageButton.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-
-				switch (event.getAction()) {
-					case MotionEvent.ACTION_DOWN :
-						canvas.setHint(R.string.listeningImageButtonTextDown);
-						speechRecognizer.startListening(speechIntent);
-						break;
-					case MotionEvent.ACTION_UP :
-						speechRecognizer.stopListening();
-						break;
-				}
-				return false;
-			}
+                if (permissionAudio != PackageManager.PERMISSION_GRANTED) {
+                    askForPermission(Manifest.permission.RECORD_AUDIO, RECORD_AUDIO_REQUEST_CODE);
+                } else {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            canvas.setHint(R.string.listeningImageButtonTextDown);
+                            speechRecognizer.startListening(speechIntent);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            speechRecognizer.stopListening();
+                            break;
+                    }
+                }
+                return false;
+            }
 		});
 	}
 
-	@Override
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        permissionCamera = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+        permissionAudio = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+        permissionStorage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    @Override
 	protected void onStart() {
 		super.onStart();
 
@@ -254,6 +324,7 @@ public class JournalActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.journal_menu, menu);
 
 		clearAllMenu = menu.findItem(R.id.clearTextMenu);
+		saveMenu = menu.findItem(R.id.saveMenuButton);
 
 		clearAllMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
@@ -265,21 +336,64 @@ public class JournalActivity extends AppCompatActivity {
 			}
 		});
 
+		saveMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem menuItem) {
+				// save note to firebase
+                if(imageURI != null && (!TextUtils.isEmpty(canvas.getText().toString()))) {
+                    saveNotes();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please select an image and write something",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+				return false;
+			}
+		});
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	// check mic permission
-	private void checkPermission() {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if(!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-					== PackageManager.PERMISSION_GRANTED)) {
-				Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-						Uri.parse("package:" + getPackageName()));
-				startActivity(i);
-				finish();
-			}
-		}
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
+            imageURI = data.getData();
+            Glide.with(getApplicationContext())
+                    .load(imageURI)
+                    .centerCrop()
+                    .into(displayPicture);
+            Log.e("TASSF", "IMAG GALLERY IMAGE URI: " + imageURI);
+        }
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            // display the picture from the storage
+            imageURI = Uri.parse(mCurrentPhotoPath);
+            Glide.with(getApplicationContext())
+                    .load(imageURI)
+                    .centerCrop()
+                    .into(displayPicture);
+            Log.e("TASSF", "CAMERA IMAGE URI: " + imageURI);
+        }
+    }
+
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(JournalActivity.this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // ask for permission
+            if (ActivityCompat.shouldShowRequestPermissionRationale(JournalActivity.this, permission)) {
+
+                // Ask the permission again if denied before
+                ActivityCompat.requestPermissions(JournalActivity.this, new String[]{permission}, requestCode);
+
+            } else {
+                ActivityCompat.requestPermissions(JournalActivity.this, new String[]{permission}, requestCode);
+            }
+            return;
+        }
+    }
 
 	// set the behaviour of the clear text dialog box
 	private void setDialogConfirmation() {
@@ -318,44 +432,108 @@ public class JournalActivity extends AppCompatActivity {
 	// save the notes to firebase database
 	private void saveNotes() {
         savingNotesProgress.show();
-        Log.d("Tag", "SAVING");
 
-        // create user ID level
-        DatabaseReference userIdReference = notesDatabaseReference.child(currentUserID);
+        // get the storage reference for photos
+        StorageReference imageStorageFilePath = mainStorageReference.child("NotesPhotos")
+                .child(imageURI.getLastPathSegment());
+        imageStorageFilePath.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Uri downloadableUri = taskSnapshot.getDownloadUrl();
 
-        // date
-        SimpleDateFormat formater;
+                // create user ID level
+                DatabaseReference userIdReference = notesDatabaseReference.child(currentUserID);
 
-        // format the date in a specific way
-        formater = new SimpleDateFormat("MMMM, hh:mm:ss");
+                // date
+                SimpleDateFormat formater;
+                SimpleDateFormat formater2;
 
-        // transform the date into string
-        dateString = formater.format(date);
+                // format the date in a specific way
+					formater = new SimpleDateFormat("EEE, d MMM yyyy hh:mm");
 
-        // set child reference to date
-        DatabaseReference dateDatabaseReference = userIdReference.child(dateString);
+                // transform the date into string
+                dateString = formater.format(date);
 
-        // get the text and image form the activity
-        String noteText = canvas.getText().toString();
-        if (!TextUtils.isEmpty(noteText)) {
-            dateDatabaseReference.child("text").setValue(noteText);
-            dateDatabaseReference.child("picture").setValue("picture");
+                // format date for save
+				formater2 = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss_SSS");
+				String dateStringChild = formater2.format(date);
 
-            // confirm the note has been saved
-            Toast.makeText(this, this.getString(R.string.savingNotesConfirmedText),
-                    Toast.LENGTH_SHORT).show();
+                // set child reference to date
+                DatabaseReference dateDatabaseReference = userIdReference.child(dateStringChild);
 
-            // redirect the user
-            Intent i = new Intent(JournalActivity.this, MainPageActivity.class);
-            startActivity(i);
+                dateDatabaseReference.child("text").setValue(canvas.getText().toString());
+                dateDatabaseReference.child("picture").setValue(downloadableUri.toString());
+                dateDatabaseReference.child("data").setValue(dateString);
 
-            savingNotesProgress.dismiss();
+                // confirm the note has been saved
+                Toast.makeText(getApplicationContext(), getString(R.string.savingNotesConfirmedText),
+                        Toast.LENGTH_SHORT).show();
 
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.toastSave),
-                    Toast.LENGTH_SHORT).show();
-            Log.d("TAG2", "Dismiss");
-            savingNotesProgress.dismiss();
-        }
+                // redirect the user
+                Intent i = new Intent(JournalActivity.this, MainPageActivity.class);
+                startActivity(i);
+
+                savingNotesProgress.dismiss();
+
+                Toast.makeText(getApplicationContext(), getString(R.string.toastSave),
+                        Toast.LENGTH_SHORT).show();
+                Log.d("TAG2", "Dismiss");
+                savingNotesProgress.dismiss();
+            }
+        });
 	}
+
+	// open image gallery and select an image
+    private void chooseSetImage() {
+        Intent galleryI = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(galleryI, IMAGE_GALLERY_REQUEST_CODE);
+    }
+
+	// create the file in Pictures folder
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",    // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    // start the camera and display the photo
+    private void capturePhoto() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.i("TAG", "");
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+    }
+
+    // display the full size picture
+    private void showPictureInView() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(imageURI, "image/*");
+        startActivity(intent);
+    }
+
 }

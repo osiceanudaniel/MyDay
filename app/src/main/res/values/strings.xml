@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyDay</string>
-    <string name="loginBtn">Sign In</string>
-    <string name="loginRegisterLink">No account? Register here</string>
-    <string name="loginProgressTitle">Waiting for login...</string>
-    <string name="loginFailureText">Something went wrong when logging in!</string>
-    <string name="loginFailed">Something went wrong. Retype email and password.</string>
+    <string name="app_name" translatable="false">MyDay</string>
+    <string name="loginBtn">Logare</string>
+    <string name="loginRegisterLink">Nu ai cont? Înregistrează-te aici</string>
+    <string name="loginProgressTitle">Aşteptare logare ...</string>
+    <string name="loginFailureText">Am întâmpinat probleme la logare!</string>
+    <string name="loginFailed">Problemă la logare. Reintroduceţi email-ul şi parola!</string>
     <string name="loginEmailHint">Email</string>
     <string name="loginPasswordHint">Password</string>
-    <string name="logoutMenuItemName">Logout</string>
+    <string name="logoutMenuItemName">Delogare</string>
     <string name="createPostMenu">Create post</string>
-    <string name="aboutMenu">About</string>
+    <string name="aboutMenu">Despre</string>
 
 
-    <string name="registerBtn">Register</string>
-    <string name="toastEmptyText">Please complete all fields!</string>
-    <string name="toastSuccReg">Registration successful! :)</string>
-    <string name="registrationProgressTitle">Waiting...</string>
-    <string name="registrationProgressMessage">Waiting for registration to complete</string>
-    <string name="registrationFailureText">Something went wrong at registration!</string>
-    <string name="registrationFailed">Something went wrong. Retype email and password.</string>
-    <string name="registerUsernameHint">Insert Username ...</string>
-    <string name="registerEmailHint">Insert email ...</string>
-    <string name="registerPasswordHint">Insert password ...</string>
+    <string name="registerBtn">Înregistrare</string>
+    <string name="toastEmptyText">Completaţi toate câmpurile!</string>
+    <string name="toastSuccReg">înregistrare reuşită! :)</string>
+    <string name="registrationProgressTitle">În aşteptare...</string>
+    <string name="registrationProgressMessage">Se aşteaptă terminarea înregistrării</string>
+    <string name="registrationFailureText">S-au întămpinat probleme la înregistrare!</string>
+    <string name="registrationFailed">Problemă la logare. Reintroduceţi email-ul şi parola!</string>
+    <string name="registerUsernameHint">Introduceţi numele de utilizator ...</string>
+    <string name="registerEmailHint">Introduceţi email-ul ...</string>
+    <string name="registerPasswordHint">Introduceţi parola ...</string>
+    <string name="registerPasswordValidationHint">Reintroduceţi parola ...</string>
 
-    <string name="journalPostBtnText">Save</string>
-    <string name="toastSave">Please write a few words</string>
-    <string name="savingNotesProgressText">Saving note</string>
-    <string name="savingNotesConfirmedText">Note saved</string>
+    <string name="journalPostBtnText">Salvare</string>
+    <string name="toastSave">Scrieţi ceva îainte de a salva!</string>
+    <string name="savingNotesProgressText">Notiţa se salvează</string>
+    <string name="savingNotesConfirmedText">Notiţă salvată</string>
 
-    <string name="listeningImageButtonTextDown">Starting Listening ...</string>
-    <string name="menuClearText">Clear text</string>
-    <string name="canvasHintText">Write your thoughts here...</string>
-    <string name="alertClearTextDialogMessage">Are you sure you want to clear text?</string>
-    <string name="alertClearTextYesOption">Yes</string>
-    <string name="alertClearTextNoOption">No</string>
+    <string name="listeningImageButtonTextDown">Se ascultă ...</string>
+    <string name="menuClearText">Şterge textul</string>
+    <string name="canvasHintText">Scrie ce gândeşti aici ...</string>
+    <string name="alertClearTextDialogMessage">Sunteţi sigur că vreţi să ştergeţi textul?</string>
+    <string name="alertClearTextYesOption">Da</string>
+    <string name="alertClearTextNoOption">Nu</string>
+    <string name="toastPasswordDontMatch">Parolele nu se potrivesc!</string>
+    <string name="toastSelectAProfilePicture">Alegeţi o fotografie de profil!</string>
+    <string name="toastPasswordTooShort">Parola este prea scurtă. Introduceţi cel puţin 8 caractere!</string>
 
-    <string name="aboutTitle">About this app</string>
-    <string name="aboutText">About the app text!</string>
+    <string name="aboutTitle">Despre aplicaţie</string>
+    <string name="aboutText">Despre aplicaţie text!</string>
     <string name="randomBgText">
         You dont want to become guilty of pla gia rism
         by letting someone else s words get inad vert

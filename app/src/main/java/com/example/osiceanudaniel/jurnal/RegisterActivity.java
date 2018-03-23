@@ -17,11 +17,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -31,10 +35,12 @@ public class RegisterActivity extends AppCompatActivity {
     private final static int IMGE_REQUEST_CODE = 10;
 
     private Uri imageUri;
+    private Uri cropedPictureUri = null;
 
 	private EditText usernameEditText;
 	private EditText emailEditText;
 	private EditText passEditText;
+	private EditText retypePassEditText;
 
 	private Button signupBtn;
 
@@ -47,6 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 	private ImageView profileImage;
 
+	private StorageReference profileImageStorageReference;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
 		usernameEditText = (EditText) findViewById(R.id.registerUsernameTextField);
 		emailEditText = (EditText) findViewById(R.id.registerEmailTextField);
 		passEditText = (EditText) findViewById(R.id.registerPasswordTextField);
+		retypePassEditText = (EditText) findViewById(R.id.registerPasswordValidationTextField);
 
 		signupBtn = (Button) findViewById(R.id.registerBtn);
 
@@ -65,12 +74,15 @@ public class RegisterActivity extends AppCompatActivity {
 		usernameEditText.setText("");
 		emailEditText.setText("");
 		passEditText.setText("");
+		retypePassEditText.setText("");
 
 		// get the instance of current user
 		authUser = FirebaseAuth.getInstance();
 
 		// save info about current user in the database in the child Users
 		databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+
+		profileImageStorageReference = FirebaseStorage.getInstance().getReference();
 
 		registrationProgress = new ProgressDialog(RegisterActivity.this);
 
@@ -98,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
 				String password = passEditText.getText().toString();
 
 				// check if the user completed all fields
-				if(checkEditText(username, email, password)) {
+				if(checkEditText(username, email, password, cropedPictureUri)) {
 
 					registrationProgress.show();
 
@@ -106,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
 					registerUser(username, email, password);
 				} else {
 
-					Toast.makeText(RegisterActivity.this, R.string.toastEmptyText, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(RegisterActivity.this, R.string.toastEmptyText, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -151,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri cropedPictureUri = result.getUri();
+                cropedPictureUri = result.getUri();
 
                 // set the profile picture to be the cropped image
                 profileImage.setImageURI(cropedPictureUri);
@@ -162,11 +174,30 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // check if fields are not empty
-	private boolean checkEditText(String username, String email, String password) {
+	private boolean checkEditText(String username, String email, String password, Uri image) {
 		if(TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-
-			return false;
+            Toast.makeText(RegisterActivity.this, R.string.toastEmptyText, Toast.LENGTH_SHORT).
+                    show();
+            return false;
 		}
+
+        if (checkPassMatch() == false) {
+            Toast.makeText(getApplicationContext(), this.getString(R.string.toastPasswordDontMatch),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (image == null) {
+            Toast.makeText(getApplicationContext(), this.getString(R.string.toastSelectAProfilePicture),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() < 8) {
+            Toast.makeText(getApplicationContext(), this.getString(R.string.toastPasswordTooShort),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
 		return true;
 	}
@@ -181,15 +212,32 @@ public class RegisterActivity extends AppCompatActivity {
 				// if the registration was successful
 				if(task.isSuccessful()) {
 
-					// get the id of the current user
-					String currentUserID = authUser.getCurrentUser().getUid();
+					// storage reference
+                    StorageReference profilePicturePath = profileImageStorageReference
+                            .child("ProfilePictures")
+                            .child(cropedPictureUri.getLastPathSegment());
+                    profilePicturePath.putFile(cropedPictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-					// set another child to store username and profile picture
-					DatabaseReference dataToCurrentUser = databaseReference.child(currentUserID);
+                            Uri downloadableURL = taskSnapshot.getDownloadUrl();
 
-					// complete data for current user
-					dataToCurrentUser.child("username").setValue(username);
-					dataToCurrentUser.child("image").setValue("picture");
+                            // get the id of the current user
+                            String currentUserID = authUser.getCurrentUser().getUid();
+
+                            // set another child to store username and profile picture
+                            DatabaseReference dataToCurrentUser = databaseReference.child(currentUserID);
+
+                            // complete data for current user
+                            dataToCurrentUser.child("username").setValue(username);
+                            dataToCurrentUser.child("profilePicture").setValue(downloadableURL.toString());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RegisterActivity.this, "Nu vrea", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 					Toast.makeText(RegisterActivity.this, R.string.toastSuccReg, Toast.LENGTH_SHORT).show();
 
@@ -220,4 +268,12 @@ public class RegisterActivity extends AppCompatActivity {
 		// attach the listener to the auth object
 		authUser.addAuthStateListener(authUserListener);
 	}
+
+	// check if passwords match
+	private boolean checkPassMatch() {
+	    String firstPass = passEditText.getText().toString();
+	    String secondPass = retypePassEditText.getText().toString();
+
+	    return firstPass.equals(secondPass);
+    }
 }

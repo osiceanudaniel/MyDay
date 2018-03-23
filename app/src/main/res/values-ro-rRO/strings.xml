@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MyDay</string>
+    <string name="loginBtn">Logare</string>
+    <string name="loginRegisterLink">Nu ai cont? Înregistrează-te aici</string>
+    <string name="loginProgressTitle">Aşteptare logare ...</string>
+    <string name="loginFailureText">Am întâmpinat probleme la logare!</string>
+    <string name="loginFailed">Problemă la logare. Reintroduceţi email-ul şi parola!</string>
+    <string name="loginEmailHint">Email</string>
+    <string name="loginPasswordHint">Parolă</string>
+    <string name="logoutMenuItemName">Delogare</string>
+    <string name="createPostMenu">Creare notiţă</string>
+    <string name="aboutMenu">Despre</string>
+
+
+    <string name="registerBtn">Înregistrare</string>
+    <string name="toastEmptyText">Completaţi toate câmpurile!</string>
+    <string name="toastSuccReg">înregistrare reuşită! :)</string>
+    <string name="registrationProgressTitle">În aşteptare...</string>
+    <string name="registrationProgressMessage">Se aşteaptă terminarea înregistrării</string>
+    <string name="registrationFailureText">S-au întămpinat probleme la înregistrare!</string>
+    <string name="registrationFailed">Problemă la logare. Reintroduceţi email-ul şi parola!</string>
+    <string name="registerUsernameHint">Nume Utilizator ...</string>
+    <string name="registerEmailHint">Email ...</string>
+    <string name="registerPasswordHint">Parola ...</string>
+    <string name="registerPasswordValidationHint">Reintroduceţi parola ...</string>
+
+    <string name="journalPostBtnText">Salvare</string>
+    <string name="toastSave">Scrieţi ceva îainte de a salva!</string>
+    <string name="savingNotesProgressText">Notiţa se salvează</string>
+    <string name="savingNotesConfirmedText">Notiţă salvată</string>
+
+    <string name="listeningImageButtonTextDown">Se ascultă ...</string>
+    <string name="menuClearText">Şterge textul</string>
+    <string name="canvasHintText">Scrie ce gândeşti aici ...</string>
+    <string name="alertClearTextDialogMessage">Sunteţi sigur că vreţi să ştergeţi textul?</string>
+    <string name="alertClearTextYesOption">Da</string>
+    <string name="alertClearTextNoOption">Nu</string>
+    <string name="toastPasswordDontMatch">Parolele nu se potrivesc!</string>
+    <string name="toastSelectAProfilePicture">Alegeţi o fotografie de profil!</string>
+    <string name="toastPasswordTooShort">Parola este prea scurtă. Introduceţi cel puţin 8 caractere!</string>
+    <string name="savingNoteMenuTitle">Salvare notiţă</string>
+
+    <string name="aboutTitle">Despre aplicaţie</string>
+    <string name="aboutText">Despre aplicaţie text!</string>
+    <string name="randomBgText">
+        You dont want to become guilty of pla gia rism
+        by letting someone else s words get inad vert
+        ently mixed in with your own. If you do feel the
+        need to paste in a block of rese arch while youre
+        writing, be sure to high light the copied text in a
+        diff erent color so you can go back and remove or rewrite
+        it ent irely later.
+    </string>
+
+    <string name="confirmRecordPermission">
+        Aplicaţia are nevoie de permisiuni să utilizeze microfonul.
+        Permiteţi aplicaţiei să înregistreze audio?
+    </string>
+    <string name="confirmCameraPermission">
+        Aplicaţia are nevoie de permisiuni să utilizeze camera foto.
+        Permiteţi aplicaţiei să captureze imagini?
+    </string>
+</resources>
