@@ -4,12 +4,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -41,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
 	private EditText emailEditText;
 	private EditText passEditText;
 	private EditText retypePassEditText;
+	private CheckBox showPass;
 
 	private Button signupBtn;
 
@@ -66,6 +72,20 @@ public class RegisterActivity extends AppCompatActivity {
 		emailEditText = (EditText) findViewById(R.id.registerEmailTextField);
 		passEditText = (EditText) findViewById(R.id.registerPasswordTextField);
 		retypePassEditText = (EditText) findViewById(R.id.registerPasswordValidationTextField);
+		showPass = (CheckBox) findViewById(R.id.checkRegisterShowPassword);
+
+		showPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    passEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    retypePassEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    retypePassEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
 
 		signupBtn = (Button) findViewById(R.id.registerBtn);
 
@@ -93,10 +113,15 @@ public class RegisterActivity extends AppCompatActivity {
 		profileImage.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent imageI = new Intent(Intent.ACTION_GET_CONTENT);
-				// can choose an image with any extension
-                imageI.setType("image/*");
-				startActivityForResult(imageI, IMGE_REQUEST_CODE);
+
+				Intent galleryI = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+				startActivityForResult(galleryI, IMGE_REQUEST_CODE);
+				
+//				Intent imageI = new Intent(Intent.ACTION_GET_CONTENT);
+//				// can choose an image with any extension
+//                imageI.setType("image/*");
+//				startActivityForResult(imageI, IMGE_REQUEST_CODE);
 			}
 		});
 
@@ -235,11 +260,13 @@ public class RegisterActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(RegisterActivity.this, "Nu vrea", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Nu vrea",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
 
-					Toast.makeText(RegisterActivity.this, R.string.toastSuccReg, Toast.LENGTH_SHORT).show();
+					Toast.makeText(RegisterActivity.this,
+                            R.string.toastSuccReg, Toast.LENGTH_SHORT).show();
 
 					// dismiss the progress bar
 					registrationProgress.dismiss();
@@ -256,7 +283,8 @@ public class RegisterActivity extends AppCompatActivity {
 			@Override
 			public void onFailure(@NonNull Exception e) {
 
-				Toast.makeText(RegisterActivity.this, R.string.registrationFailureText, Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegisterActivity.this,
+						R.string.registrationFailureText, Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

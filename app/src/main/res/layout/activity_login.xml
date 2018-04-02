@@ -53,11 +53,23 @@
                 android:padding="10dp"
                 android:textSize="20dp" />
 
+            <CheckBox
+                android:id="@+id/checkLoginShowPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/showPasswordTextCheckBox"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:buttonTint="#03B6D1"
+                />
+
             <Button
                 android:id="@+id/loginSignInBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/login_btn_shape"
                 android:text="@string/loginBtn"
                 android:foreground="?attr/selectableItemBackground"

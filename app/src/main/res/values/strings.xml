@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">MyDay</string>
+    <string name="app_name">MyDay</string>
+    <string name="mainPageName">My Day</string>
+    <string name="journalPageName">Crează notiţă</string>
+    <string name="editProfilePageName">Profilul Meu</string>
+    <string name="editNotePageName">Editează notiţă</string>
+
     <string name="loginBtn">Logare</string>
     <string name="loginRegisterLink">Nu ai cont? Înregistrează-te aici</string>
     <string name="loginProgressTitle">Aşteptare logare ...</string>
@@ -11,14 +16,14 @@
     <string name="logoutMenuItemName">Delogare</string>
     <string name="createPostMenu">Create post</string>
     <string name="aboutMenu">Despre</string>
-
+    <string name="noNotesText">Notiţele tale vor apărea aici!</string>
 
     <string name="registerBtn">Înregistrare</string>
     <string name="toastEmptyText">Completaţi toate câmpurile!</string>
     <string name="toastSuccReg">înregistrare reuşită! :)</string>
     <string name="registrationProgressTitle">În aşteptare...</string>
     <string name="registrationProgressMessage">Se aşteaptă terminarea înregistrării</string>
-    <string name="registrationFailureText">S-au întămpinat probleme la înregistrare!</string>
+    <string name="registrationFailureText">S-au întâmpinat probleme la înregistrare!</string>
     <string name="registrationFailed">Problemă la logare. Reintroduceţi email-ul şi parola!</string>
     <string name="registerUsernameHint">Introduceţi numele de utilizator ...</string>
     <string name="registerEmailHint">Introduceţi email-ul ...</string>
@@ -26,7 +31,7 @@
     <string name="registerPasswordValidationHint">Reintroduceţi parola ...</string>
 
     <string name="journalPostBtnText">Salvare</string>
-    <string name="toastSave">Scrieţi ceva îainte de a salva!</string>
+    <string name="toastSave">Scrieţi ceva înainte de a salva!</string>
     <string name="savingNotesProgressText">Notiţa se salvează</string>
     <string name="savingNotesConfirmedText">Notiţă salvată</string>
 
@@ -42,6 +47,7 @@
 
     <string name="aboutTitle">Despre aplicaţie</string>
     <string name="aboutText">Despre aplicaţie text!</string>
+    <string name="writeSomethigOrPickImage">Alegeţi o imagine şi scrieţi ceva!</string>
     <string name="randomBgText">
         You dont want to become guilty of pla gia rism
         by letting someone else s words get inad vert
@@ -51,5 +57,32 @@
         diff erent color so you can go back and remove or rewrite
         it ent irely later.
     </string>
+    <string name="showPasswordTextCheckBox">Arată parola</string>
+    <string name="savingNoteMenuTitle">Salvare notiţă</string>
+
+    <string name="newUsernameHint">Noul nume ...</string>
+    <string name="saveModificationsBtnTxt">Salvare</string>
+    <string name="changePictureBtnText">Schimbă imaginea</string>
+    <string name="enterUsername">Introdu un nume</string>
+    <string name="profileEdited">Profilul a fost editat cu succes</string>
+    <string name="profileEditSaveDialog">În aşteptare</string>
+    <string name="areYouSureDialogMessage">Vrei să salvezi modificările?</string>
+    <string name="areYouSureDeleteMessage">Vrei să ştergi notiţa?</string>
+    <string name="noteDeletedSuccess">Notiţa a fost ştearsă cu succes!</string>
+    <string name="noteModified">Notiţa a fost modificată!</string>
+    <string name="loadingText">Se încarcă ...</string>
+
+    <string name="confirmRecordPermission">
+         Aplicaţia are nevoie de permisiuni să utilizeze microfonul.
+        Permiteţi aplicaţiei să înregistreze audio?
+    </string>
+    <string name="confirmCameraPermission">
+        Aplicaţia are nevoie de permisiuni să utilizeze camera foto.
+        Permiteţi aplicaţiei să captureze imagini?
+    </string>
+
+    <string name="title_activity_wait">WaitActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

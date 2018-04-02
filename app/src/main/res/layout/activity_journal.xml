@@ -14,10 +14,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="10dp">
-        <!--android:weightSum="7.5"-->
 
-        <!--android:layout_weight=".5"-->
-        <!--android:weightSum="3"-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -88,50 +85,42 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/edit_text_stroke">
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp">
 
-            <!--<Button-->
-            <!--android:id="@+id/journalPostBtn"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/login_btn_shape"-->
-            <!--android:text="@string/journalPostBtnText"-->
-            <!--android:textColor="#ffffff"-->
-            <!--android:textSize="16dp" />-->
             <ImageView
                 android:id="@+id/PictureImageView"
                 android:layout_width="200dp"
-                android:layout_height="135dp"
+                android:layout_height="130dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="10dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@mipmap/add_btn" />
 
             <ImageView
-                android:id="@+id/CameraFrameImageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:id="@+id/PictureFraImageViewImageView"
+                android:layout_width="200dp"
+                android:layout_height="130dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="31dp"
-                android:layout_marginStart="31dp"
-                android:layout_toEndOf="@+id/PictureImageView"
-                android:layout_toRightOf="@+id/PictureImageView"
-                android:background="@drawable/jurnal_image_stroke" />
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/journal_picture_frame" />
 
             <ImageButton
                 android:id="@+id/CameraImageButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_alignLeft="@+id/CameraFrameImageView"
-                android:layout_alignStart="@+id/CameraFrameImageView"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="36dp"
+                android:layout_marginRight="36dp"
                 android:background="@null"
                 android:foreground="?attr/selectableItemBackground"
-                android:src="@mipmap/ic_camera_black_48dp" />
+                android:src="@mipmap/ic_local_see_black_48dp" />
 
         </RelativeLayout>
     </LinearLayout>

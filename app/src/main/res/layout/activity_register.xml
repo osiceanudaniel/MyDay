@@ -31,16 +31,16 @@
                     android:layout_height="150dp"
                     android:src="@drawable/profile"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="25dp"/>
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/secondCircleImageView"
                     android:layout_width="152dp"
                     android:layout_height="152dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:background="@drawable/image_stroke"/>
             </RelativeLayout>
@@ -91,12 +91,25 @@
                 android:hint="@string/registerPasswordValidationHint"
                 android:background="@drawable/input_fields"
                 android:drawableLeft="@drawable/ic_lock"/>
+
+            <CheckBox
+                android:id="@+id/checkRegisterShowPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/showPasswordTextCheckBox"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:buttonTint="#03B6D1"
+                />
+
             <Button
                 android:id="@+id/registerBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/registerBtn"
-                android:layout_marginTop="43dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/login_btn_shape"
                 android:foreground="?attr/selectableItemBackground"
                 android:textColor="#ffffff"

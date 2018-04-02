@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyDay</string>
     <string name="loginBtn">Sign In</string>
     <string name="loginRegisterLink">No account? Register here</string>
     <string name="loginProgressTitle">Waiting for login ...</string>
@@ -12,6 +11,7 @@
     <string name="createPostMenu">Create note</string>
     <string name="aboutMenu">About</string>
 
+    <string name="showPasswordTextCheckBox">Show password</string>
 
     <string name="registerBtn">Register</string>
     <string name="toastEmptyText">Complete all the fields!</string>
@@ -61,5 +61,22 @@
         You need to provide camera permission.
         Do you allow the application to take pictures?
     </string>
+    <string name="noNotesText">Notes will be displayed here!</string>
+    <string name="writeSomethigOrPickImage">Please select an image and write something</string>
+    <string name="app_name">MyDay</string>
+    <string name="journalPageName">Create note</string>
+    <string name="editProfilePageName">My Profile</string>
+    <string name="editNotePageName">Edit note</string>
+    <string name="newUsernameHint">New username ...</string>
+    <string name="saveModificationsBtnTxt">Save</string>
+    <string name="changePictureBtnText">Change picture</string>
+    <string name="enterUsername">Enter a username</string>
+    <string name="profileEdited">Your profile was successfully edited</string>
+    <string name="profileEditSaveDialog">Waiting ...</string>
+    <string name="areYouSureDialogMessage">Do you want to save changes?</string>
+    <string name="areYouSureDeleteMessage">Do you want to delete this note?</string>
+    <string name="noteDeletedSuccess">Note successfully deleted!</string>
+    <string name="noteModified">Note has been modified!</string>
+    <string name="loadingText">Loading ...</string>
 
 </resources>

@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 	private FirebaseAuth authUser;
 
 	private ProgressDialog progressLogin;
+	private CheckBox showPass;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,18 @@ public class LoginActivity extends AppCompatActivity {
 
 		emailEditText = (EditText) findViewById(R.id.loginEmailTextField);
 		passEditText = (EditText) findViewById(R.id.loginPasswordTextField);
+        showPass = (CheckBox) findViewById(R.id.checkLoginShowPassword);
+
+        showPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    passEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
 
 		loginBtn = (Button) findViewById(R.id.loginSignInBtn);
 
@@ -83,7 +100,8 @@ public class LoginActivity extends AppCompatActivity {
 					// login the user
 					loginUser(email, password);
 				} else {
-					Toast.makeText(LoginActivity.this, R.string.toastEmptyText, Toast.LENGTH_SHORT).show();
+					Toast.makeText(LoginActivity.this,
+							getString(R.string.toastEmptyText), Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -135,6 +153,5 @@ public class LoginActivity extends AppCompatActivity {
         exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(exit);
     }
-
 
 }

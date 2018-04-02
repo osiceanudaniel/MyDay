@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
@@ -111,6 +112,10 @@ public class JournalActivity extends AppCompatActivity {
                 Manifest.permission.RECORD_AUDIO);
         permissionStorage = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        // make app compatible with android oreo and above
+        StrictMode.VmPolicy.Builder newbuilder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(newbuilder.build());
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -298,27 +303,44 @@ public class JournalActivity extends AppCompatActivity {
     }
 
     @Override
-	protected void onStart() {
-		super.onStart();
+    protected void onStart() {
+        super.onStart();
 
-		// disable app name on Action bar
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // disable app name on Action bar
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-		SimpleDateFormat formater;
+        SimpleDateFormat formater;
 
-		// format the date in a specific way
-		formater = new SimpleDateFormat("MMMM, hh:mm");
-		// get the current date
-		date = new Date();
+        // format the date in a specific way
+        formater = new SimpleDateFormat("MMMM, hh:mm");
+        // get the current date
+        date = new Date();
 
-		// transform the date into string
-		dateString = formater.format(date);
+        // transform the date into string
+        dateString = formater.format(date);
 
-		// show the date
-		dateEditText.setText(dateString);
-	}
+        // show the date
+        dateEditText.setText(dateString);
 
-	@Override
+        Log.e("TAHBSSA", "ON START CALLED");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // get the permissions again
+        permissionCamera = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+        permissionAudio = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+        permissionStorage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        Log.e("TAT", "ON RESUME CALLED");
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// show the menu items
 		getMenuInflater().inflate(R.menu.journal_menu, menu);
@@ -343,7 +365,7 @@ public class JournalActivity extends AppCompatActivity {
                 if(imageURI != null && (!TextUtils.isEmpty(canvas.getText().toString()))) {
                     saveNotes();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please select an image and write something",
+                    Toast.makeText(getApplicationContext(), getString(R.string.writeSomethigOrPickImage),
                             Toast.LENGTH_SHORT).show();
                 }
 
@@ -475,10 +497,10 @@ public class JournalActivity extends AppCompatActivity {
 
                 savingNotesProgress.dismiss();
 
-                Toast.makeText(getApplicationContext(), getString(R.string.toastSave),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), getString(R.string.toastSave),
+//                        Toast.LENGTH_SHORT).show();
                 Log.d("TAG2", "Dismiss");
-                savingNotesProgress.dismiss();
+//                savingNotesProgress.dismiss();
             }
         });
 	}
@@ -526,14 +548,6 @@ public class JournalActivity extends AppCompatActivity {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
             }
         }
-    }
-
-    // display the full size picture
-    private void showPictureInView() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(imageURI, "image/*");
-        startActivity(intent);
     }
 
 }

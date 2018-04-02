@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.osiceanudaniel.jurnal.ProfileEditActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F6FBFB">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/newProfilePictureId"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:clickable="false"
+                android:src="@drawable/profile" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/newProfilePictureFrameId"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/image_stroke"
+                android:clickable="false" />
+
+            <EditText
+                android:id="@+id/newUsernameEditTextId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newProfilePictureId"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:hint="@string/newUsernameHint"
+                android:padding="10dp"
+                android:text=""
+                android:textColor="#02364D"
+                android:textAlignment="center"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/changePictureBtnId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newUsernameEditTextId"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:textSize="13dp"
+                android:text="@string/changePictureBtnText"
+                android:backgroundTint="#FFFFFF"/>
+
+            <ProgressBar
+                android:id="@+id/profileEditProgressBarId"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_above="@+id/newUsernameEditTextId"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="55dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/saveNewProfileBtnId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/save_btn_shape"
+        android:text="@string/saveModificationsBtnTxt"
+        android:foreground="?attr/selectableItemBackground"
+        android:textSize="16dp"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>

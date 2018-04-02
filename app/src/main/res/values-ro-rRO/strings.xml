@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">MyDay</string>
     <string name="loginBtn">Logare</string>
     <string name="loginRegisterLink">Nu ai cont? Înregistrează-te aici</string>
     <string name="loginProgressTitle">Aşteptare logare ...</string>
@@ -12,6 +11,7 @@
     <string name="createPostMenu">Creare notiţă</string>
     <string name="aboutMenu">Despre</string>
 
+    <string name="showPasswordTextCheckBox">Arată parola</string>
 
     <string name="registerBtn">Înregistrare</string>
     <string name="toastEmptyText">Completaţi toate câmpurile!</string>
@@ -61,4 +61,21 @@
         Aplicaţia are nevoie de permisiuni să utilizeze camera foto.
         Permiteţi aplicaţiei să captureze imagini?
     </string>
+    <string name="noNotesText">Notiţele tale vor apărea aici!</string>
+    <string name="writeSomethigOrPickImage">Alegeţi o imagine şi scrieţi ceva!</string>
+    <string name="app_name">MyDay</string>
+    <string name="journalPageName">Crează notiţă</string>
+    <string name="editProfilePageName">Profilul Meu</string>
+    <string name="editNotePageName">Editează notiţă</string>
+    <string name="newUsernameHint">Noul nume ...</string>
+    <string name="saveModificationsBtnTxt">Salvare</string>
+    <string name="changePictureBtnText">Schimbă imaginea</string>
+    <string name="enterUsername">Introdu un nume</string>
+    <string name="profileEdited">Profilul a fost editat cu succes</string>
+    <string name="profileEditSaveDialog">În aşteptare</string>
+    <string name="areYouSureDialogMessage">Vrei să salvezi modificările?</string>
+    <string name="areYouSureDeleteMessage">Vrei să ştergi notiţa?</string>
+    <string name="noteDeletedSuccess">Notiţa a fost ştearsă cu succes!</string>
+    <string name="noteModified">Notiţa a fost modificată!</string>
+    <string name="loadingText">Se încarcă ...</string>
 </resources>
