@@ -204,17 +204,17 @@ public class EditNoteActivity extends AppCompatActivity {
                                 deleteOldNotePicture();
                             }
 
-                            progressDialog.dismiss();
-                            startActivity(new Intent(EditNoteActivity.this,
-                                    MainPageActivity.class));
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.noteModified), Toast.LENGTH_SHORT).show();
                         } else {
                             progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(),
                                     getString(R.string.toastSave), Toast.LENGTH_SHORT).show();
+                            break;
                         }
-
+                        progressDialog.dismiss();
+                        startActivity(new Intent(EditNoteActivity.this,
+                                MainPageActivity.class));
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.noteModified), Toast.LENGTH_SHORT).show();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;

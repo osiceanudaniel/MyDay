@@ -1,9 +1,13 @@
 package com.example.osiceanudaniel.jurnal;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -31,13 +35,24 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Set;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPageActivity extends AppCompatActivity {
+
+    public static final int ALARM_REQUEST = 729;
+
+    private boolean notificationON;
+    private int hour;
+    private int minute;
 
 	private TextView usernameText;
     private TextView noNotesTextView;
@@ -64,12 +79,18 @@ public class MainPageActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private String newPostKey;
 
+    private LinearLayoutManager orderedByDateAscendingLayout;
+    private LinearLayoutManager orderedByDateDescendingLayout;
+
     private FirebaseRecyclerAdapter<Notes, NotesViewHolder> firebaseRecyclerAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+        loadSharedPreferences();
+        checkNotificationStatus(savedInstanceState);
 
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbarId);
         this.setSupportActionBar(toolbar);
@@ -92,6 +113,8 @@ public class MainPageActivity extends AppCompatActivity {
 
         authUser = FirebaseAuth.getInstance();
         mainDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mainDatabaseReference.keepSynced(true);
+
         profileImageImageView = (CircleImageView) findViewById(R.id.circleImageViewMain);
         noNotesTextView = (TextView) findViewById(R.id.noNotesTextView);
         noNotesTextView.setText("");
@@ -99,7 +122,12 @@ public class MainPageActivity extends AppCompatActivity {
         // get the recycler view reference
         notesListRecyclerView = (RecyclerView) findViewById(R.id.recycleViewMain);
         notesListRecyclerView.setHasFixedSize(true);
-        notesListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        orderedByDateAscendingLayout = new LinearLayoutManager(this);
+        orderedByDateDescendingLayout = new LinearLayoutManager(this);
+        orderedByDateDescendingLayout.setReverseLayout(true);
+        orderedByDateDescendingLayout.setStackFromEnd(true);
+        notesListRecyclerView.setLayoutManager(orderedByDateDescendingLayout);
 
 		authUserListener = new FirebaseAuth.AuthStateListener() {
 			@Override
@@ -112,6 +140,7 @@ public class MainPageActivity extends AppCompatActivity {
                     notesDatabaseReference = FirebaseDatabase.getInstance().getReference()
                             .child("Notes")
                             .child(authUser.getUid());
+                    notesDatabaseReference.keepSynced(true);
 
                     // end recycler view reference
 
@@ -223,6 +252,8 @@ public class MainPageActivity extends AppCompatActivity {
 	protected void onStart() {
 		super.onStart();
 
+        notesListRecyclerView.setLayoutManager(orderedByDateDescendingLayout);
+
 		Log.e("TASVJASVFJ", "ON START DE LA MAIN APELAT");
 
 		authUser.addAuthStateListener(authUserListener);
@@ -239,7 +270,7 @@ public class MainPageActivity extends AppCompatActivity {
                                                 Notes.class,
                                                 R.layout.journal_list_row,
                                                 NotesViewHolder.class,
-                                                notesDatabaseReference
+                                                notesDatabaseReference.orderByChild("date")
                                         ) {
                                             @Override
                                             protected void populateViewHolder(NotesViewHolder viewHolder, final Notes model, final int position) {
@@ -254,6 +285,7 @@ public class MainPageActivity extends AppCompatActivity {
                                                     public void onClick(View v) {
                                                         DatabaseReference imgRef = notesDatabaseReference
                                                                 .child(post_key + "/picture");
+                                                        imgRef.keepSynced(true);
 
                                                         imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                             @Override
@@ -276,8 +308,8 @@ public class MainPageActivity extends AppCompatActivity {
                                                 viewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
-                                                        newPostKey = post_key;
                                                         confirmDialog.show();
+                                                        newPostKey = post_key;
                                                     }
                                                 });
 
@@ -335,6 +367,13 @@ public class MainPageActivity extends AppCompatActivity {
                 break;
             case R.id.createNoteMenu:
                 createNote();
+                break;
+            case R.id.ascendingSort:
+                notesListRecyclerView.setLayoutManager(orderedByDateAscendingLayout);
+                break;
+            case R.id.notificationMenu:
+                startActivity(new Intent(MainPageActivity.this,
+                        SetNotificationTimeActivity.class));
                 break;
             case R.id.aboutMenu:
                 displayAboutText();
@@ -424,5 +463,63 @@ public class MainPageActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(imageURI, "image/*");
         startActivity(intent);
+    }
+
+    //start the notification
+    public void checkNotificationStatus(Bundle savedInstanceSta) {
+	    if (notificationON) {
+	        Log.e("TASAf", "NOTIFICATION IS BUILDING\n NOTIFICATION" +
+                    ": " + hour + ":" + minute);
+        } else {
+            Log.e("TASAf", "NOTIFICATION ALREADY SET");
+        }
+        if (notificationON) {
+            Calendar calendar = Calendar.getInstance();
+            //calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            calendar.set(Calendar.SECOND, 3);
+            if (calendar.getTime().compareTo(new Date()) < 0) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                Log.e("TTATAS", "SETAT PENTRU ZIUA URMATOARE");
+            }
+            // set the notification
+            Intent i = new Intent(getApplicationContext(), Notification_receiver.class);
+
+            // alarm manager
+            PendingIntent pI = PendingIntent.getBroadcast(getApplicationContext(),
+                    ALARM_REQUEST, i, PendingIntent.FLAG_UPDATE_CURRENT);
+           if (savedInstanceSta == null) {
+               Log.e("TTATAS", "A INTRAT SI PE AICI");
+               AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+               // set the repeating alarm
+               alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, //triggered even in sleep mode
+                       calendar.getTimeInMillis(), //when the alarm will be triggered
+                       alarmManager.INTERVAL_DAY,  //notify every day
+                       pI);
+           }
+        } else {
+            try {
+                Log.e("GASHJKF", "NOTIFICARI OPRITE");
+                Intent notificationIntent = new Intent(getApplicationContext(),
+                        Notification_receiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                        ALARM_REQUEST, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager = (AlarmManager) getApplicationContext()
+                        .getSystemService(Context.ALARM_SERVICE);
+                alarmManager.cancel(pendingIntent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadSharedPreferences() {
+        SharedPreferences sharedPref = getSharedPreferences(
+                SetNotificationTimeActivity.SHARED_PREFERENCES, MODE_PRIVATE);
+
+        hour = sharedPref.getInt(SetNotificationTimeActivity.HOUR_PREFERENCE, 18);
+        minute = sharedPref.getInt(SetNotificationTimeActivity.MINUTE_PREFERENCE, 0);
+        notificationON = sharedPref.getBoolean(SetNotificationTimeActivity.TOGGLE_STATE, true);
     }
 }

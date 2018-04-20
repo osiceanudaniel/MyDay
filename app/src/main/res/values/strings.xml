@@ -71,6 +71,16 @@
     <string name="noteDeletedSuccess">Notiţa a fost ştearsă cu succes!</string>
     <string name="noteModified">Notiţa a fost modificată!</string>
     <string name="loadingText">Se încarcă ...</string>
+    <string name="sortAscending">Ordonează după dată</string>
+    <string name="showWhenConnectedNote">Notiţa va fi afişată când vă veţi conecta la internet!</string>
+    <string name="notificationTitle">O zi plină?</string>
+    <string name="notificationMessage">Nu uita să scrii momentele importante petrecute astăzi!</string>
+    <string name="saveTimeString">Salvare</string>
+    <string name="setNotificationTime">Programează notificările</string>
+    <string name="notificationSet">Notificări activate</string>
+    <string name="notificationNotSet">Notificări dezactivate</string>
+    <string name="notificationEnabled">Notificări activate. Vei primi notificări în fiecare zi la ora specificată!</string>
+    <string name="notificationDisabled">Notificări dezactivate</string>
 
     <string name="confirmRecordPermission">
          Aplicaţia are nevoie de permisiuni să utilizeze microfonul.

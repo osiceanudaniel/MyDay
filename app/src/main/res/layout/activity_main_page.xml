@@ -113,11 +113,13 @@
         android:textSize="35dp"
         android:textColor="#FFFFFF"
         android:textAlignment="center"
+        android:clickable="false"
         android:paddingTop="360dp"/>
     <ProgressBar
         android:id="@+id/progressBarId"
         android:layout_gravity="center"
         android:layout_width="130dp"
+        android:clickable="false"
         android:layout_height="130dp" />
 
 </android.support.design.widget.CoordinatorLayout>

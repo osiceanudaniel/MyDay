@@ -91,6 +91,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/saveModificationsBtnTxt"
         android:textColor="#FFFFFF"
+        android:foreground="?attr/selectableItemBackground"
         android:textSize="16dp"
         android:background="@drawable/save_btn_shape"/>
 </RelativeLayout>

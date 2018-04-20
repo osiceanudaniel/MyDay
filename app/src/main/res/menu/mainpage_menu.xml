@@ -9,6 +9,16 @@
           app:showAsAction="never">
     </item>
 
+    <item android:id="@+id/ascendingSort"
+          android:title="@string/sortAscending"
+          app:showAsAction="never">
+    </item>
+
+    <item android:id="@+id/notificationMenu"
+        android:title="@string/setNotificationTime"
+        app:showAsAction="never">
+    </item>
+
     <item android:id="@+id/aboutMenu"
           android:title="@string/aboutMenu"
           app:showAsAction="never">

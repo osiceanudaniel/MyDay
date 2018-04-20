@@ -5,19 +5,18 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +47,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +59,11 @@ public class JournalActivity extends AppCompatActivity {
 	private final static int IMAGE_GALLERY_REQUEST_CODE = 20;
 	private final static int CAMERA_REQUEST_CODE = 30;
 	private final static int RECORD_AUDIO_REQUEST_CODE = 40;
+
+	//Thread
+	Thread thread;
+	private int time = 0;
+    public static boolean stopThread = false;
 
 	private FirebaseAuth authUser;
 	private DatabaseReference usersDatabaseReference;
@@ -113,6 +116,40 @@ public class JournalActivity extends AppCompatActivity {
         permissionStorage = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+        // Timer
+		thread = new Thread() {
+			@Override
+			public void run() {
+				while (!JournalActivity.stopThread) {
+					try {
+						Thread.sleep(1000);
+
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								time++;
+
+                                if (time == 6) {
+                                    // redirect the user
+                                    JournalActivity.stopThread = true;
+                                    Intent i = new Intent(JournalActivity.this,
+                                            MainPageActivity.class);
+                                    startActivity(i);
+
+                                    Toast.makeText(getApplicationContext(), getString(R.string.showWhenConnectedNote),
+                                            Toast.LENGTH_SHORT).show();
+
+                                    savingNotesProgress.dismiss();
+                                }
+							}
+						});
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+
         // make app compatible with android oreo and above
         StrictMode.VmPolicy.Builder newbuilder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(newbuilder.build());
@@ -126,9 +163,11 @@ public class JournalActivity extends AppCompatActivity {
 		// reference the username of the current user in the database
 		usersDatabaseReference = FirebaseDatabase.getInstance().
 				getReference("Users/"+currentUserID+"/username");
+		usersDatabaseReference.keepSynced(true);
 
 		// set the notes database reference
 		notesDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notes");
+		notesDatabaseReference.keepSynced(true);
 
 		displayText = "";
         savingNotesProgress = new ProgressDialog(this);
@@ -359,10 +398,12 @@ public class JournalActivity extends AppCompatActivity {
 		});
 
 		saveMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			@Override
+			@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
 			public boolean onMenuItemClick(MenuItem menuItem) {
 				// save note to firebase
                 if(imageURI != null && (!TextUtils.isEmpty(canvas.getText().toString()))) {
+                    thread.start();
                     saveNotes();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.writeSomethigOrPickImage),
@@ -452,57 +493,62 @@ public class JournalActivity extends AppCompatActivity {
 	}
 
 	// save the notes to firebase database
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void saveNotes() {
         savingNotesProgress.show();
 
         // get the storage reference for photos
         StorageReference imageStorageFilePath = mainStorageReference.child("NotesPhotos")
                 .child(imageURI.getLastPathSegment());
-        imageStorageFilePath.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadableUri = taskSnapshot.getDownloadUrl();
+       try {
+		   imageStorageFilePath.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+			   @Override
+			   public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+				   Uri downloadableUri = taskSnapshot.getDownloadUrl();
 
-                // create user ID level
-                DatabaseReference userIdReference = notesDatabaseReference.child(currentUserID);
+				   // create user ID level
+				   DatabaseReference userIdReference = notesDatabaseReference.child(currentUserID);
 
-                // date
-                SimpleDateFormat formater;
-                SimpleDateFormat formater2;
+				   // date
+				   SimpleDateFormat formater;
+				   SimpleDateFormat formater2;
 
-                // format the date in a specific way
-					formater = new SimpleDateFormat("EEE, d MMM yyyy hh:mm");
+				   // format the date in a specific way
+				   formater = new SimpleDateFormat("EEE, d MMM yyyy hh:mm");
 
-                // transform the date into string
-                dateString = formater.format(date);
+				   // transform the date into string
+				   dateString = formater.format(date);
 
-                // format date for save
-				formater2 = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss_SSS");
-				String dateStringChild = formater2.format(date);
+				   // format date for save
+				   formater2 = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss_SSS");
+				   String dateStringChild = formater2.format(date);
 
-                // set child reference to date
-                DatabaseReference dateDatabaseReference = userIdReference.child(dateStringChild);
+				   // set child reference to date
+				   DatabaseReference dateDatabaseReference = userIdReference.child(dateStringChild);
 
-                dateDatabaseReference.child("text").setValue(canvas.getText().toString());
-                dateDatabaseReference.child("picture").setValue(downloadableUri.toString());
-                dateDatabaseReference.child("data").setValue(dateString);
+				   dateDatabaseReference.child("text").setValue(canvas.getText().toString());
+				   dateDatabaseReference.child("picture").setValue(downloadableUri.toString());
+				   dateDatabaseReference.child("data").setValue(dateString);
 
-                // confirm the note has been saved
-                Toast.makeText(getApplicationContext(), getString(R.string.savingNotesConfirmedText),
-                        Toast.LENGTH_SHORT).show();
+				   // confirm the note has been saved
+				   Toast.makeText(getApplicationContext(), getString(R.string.savingNotesConfirmedText),
+						   Toast.LENGTH_SHORT).show();
 
-                // redirect the user
-                Intent i = new Intent(JournalActivity.this, MainPageActivity.class);
-                startActivity(i);
+				   // redirect the user
+				   Intent i = new Intent(JournalActivity.this, MainPageActivity.class);
+				   startActivity(i);
 
-                savingNotesProgress.dismiss();
+				   savingNotesProgress.dismiss();
+			   }
+		   }).addOnFailureListener(new OnFailureListener() {
+			   @Override
+			   public void onFailure(@NonNull Exception e) {
 
-//                Toast.makeText(getApplicationContext(), getString(R.string.toastSave),
-//                        Toast.LENGTH_SHORT).show();
-                Log.d("TAG2", "Dismiss");
-//                savingNotesProgress.dismiss();
-            }
-        });
+			   }
+		   });
+	   } catch (Exception e) {
+       		Log.e("ASGAS","A intrat pe network");
+	   }
 	}
 
 	// open image gallery and select an image
