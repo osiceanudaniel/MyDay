@@ -33,7 +33,7 @@
 
     <string name="listeningImageButtonTextDown">Listening ...</string>
     <string name="menuClearText">Clear text</string>
-    <string name="canvasHintText">Write your thoughts here ...</string>
+    <string name="canvasHintText">Text will be displayed here ...</string>
     <string name="alertClearTextDialogMessage">Are you sure you want to clear text?</string>
     <string name="alertClearTextYesOption">Yes</string>
     <string name="alertClearTextNoOption">No</string>
@@ -41,8 +41,8 @@
     <string name="toastSelectAProfilePicture">Choose a profile picture!</string>
     <string name="toastPasswordTooShort">Password too short. Insert at least 8 characters!</string>
 
-    <string name="aboutTitle">About</string>
-    <string name="aboutText">About this app text!</string>
+    <string name="aboutTitle">about</string>
+    <string name="aboutText">Version 1.0</string>
     <string name="randomBgText">
         You dont want to become guilty of pla gia rism
         by letting someone else s words get inad vert
@@ -78,5 +78,22 @@
     <string name="noteDeletedSuccess">Note successfully deleted!</string>
     <string name="noteModified">Note has been modified!</string>
     <string name="loadingText">Loading ...</string>
+    <string name="sortAscending">Sort by date</string>
+    <string name="showWhenConnectedNote">The entry will be shown once you connect to the Internet</string>
+    <string name="notificationTitle">Had a busy day?</string>
+    <string name="notificationMessage">Don\'t forget to write your thoughts!</string>
+    <string name="saveTimeString">Saving</string>
+    <string name="setNotificationTime">Schedule notifications</string>
+    <string name="notificationSet">Notifications enabled</string>
+    <string name="patternSet">Pattern unlock enabled</string>
+    <string name="notificationNotSet">Notifications disabled</string>
+    <string name="patternNotSet">Pattern unlock disabled</string>
+    <string name="notificationEnabled">Notifications enabled. You\'ll receive notifications everyday!</string>
+    <string name="notificationDisabled">Notifications disabled</string>
+    <string name="wrongPattern">Wrong pattern</string>
+    <string name="patternCreated">Pattern setted</string>
+    <string name="textViewSetPattern">Set unlock pattern</string>
+    <string name="setPatternMenu">Set unlock pattern</string>
+    <string name="saveCommandAudio">Save</string>
 
 </resources>

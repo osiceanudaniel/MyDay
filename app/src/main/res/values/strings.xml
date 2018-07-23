@@ -17,6 +17,7 @@
     <string name="createPostMenu">Create post</string>
     <string name="aboutMenu">Despre</string>
     <string name="noNotesText">Notiţele tale vor apărea aici!</string>
+    <string name="saveCommandAudio">Salvare</string>
 
     <string name="registerBtn">Înregistrare</string>
     <string name="toastEmptyText">Completaţi toate câmpurile!</string>
@@ -37,7 +38,7 @@
 
     <string name="listeningImageButtonTextDown">Se ascultă ...</string>
     <string name="menuClearText">Şterge textul</string>
-    <string name="canvasHintText">Scrie ce gândeşti aici ...</string>
+    <string name="canvasHintText">Textul va fi afişat aici ...</string>
     <string name="alertClearTextDialogMessage">Sunteţi sigur că vreţi să ştergeţi textul?</string>
     <string name="alertClearTextYesOption">Da</string>
     <string name="alertClearTextNoOption">Nu</string>
@@ -45,8 +46,8 @@
     <string name="toastSelectAProfilePicture">Alegeţi o fotografie de profil!</string>
     <string name="toastPasswordTooShort">Parola este prea scurtă. Introduceţi cel puţin 8 caractere!</string>
 
-    <string name="aboutTitle">Despre aplicaţie</string>
-    <string name="aboutText">Despre aplicaţie text!</string>
+    <string name="aboutTitle">despre</string>
+    <string name="aboutText">Versiunea 1.0</string>
     <string name="writeSomethigOrPickImage">Alegeţi o imagine şi scrieţi ceva!</string>
     <string name="randomBgText">
         You dont want to become guilty of pla gia rism
@@ -78,9 +79,13 @@
     <string name="saveTimeString">Salvare</string>
     <string name="setNotificationTime">Programează notificările</string>
     <string name="notificationSet">Notificări activate</string>
+    <string name="patternSet">Model deblocare activat</string>
     <string name="notificationNotSet">Notificări dezactivate</string>
+    <string name="patternNotSet">Model deblocare dezactivat</string>
     <string name="notificationEnabled">Notificări activate. Vei primi notificări în fiecare zi la ora specificată!</string>
     <string name="notificationDisabled">Notificări dezactivate</string>
+    <string name="wrongPattern">Model greşit</string>
+    <string name="patternCreated">Model setat</string>
 
     <string name="confirmRecordPermission">
          Aplicaţia are nevoie de permisiuni să utilizeze microfonul.
@@ -94,5 +99,8 @@
     <string name="title_activity_wait">WaitActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="textViewSetPattern">Setează model</string>
+    <string name="setPatternMenu">Setează model deblocare</string>
 
 </resources>

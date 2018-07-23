@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 				String email = emailEditText.getText().toString();
 				String password = passEditText.getText().toString();
 
-				// check if the user entered somethig
+				// check if the user entered something
 				if (checkEditText(email, password)) {
 
 					progressLogin.show();

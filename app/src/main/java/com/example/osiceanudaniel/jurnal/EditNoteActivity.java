@@ -155,8 +155,6 @@ public class EditNoteActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.i("TAG", "");
                 ex.printStackTrace();
             }
             // Continue only if the File was successfully created
@@ -288,7 +286,7 @@ public class EditNoteActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditNoteActivity.this, "Nu vrea",
+                Toast.makeText(EditNoteActivity.this, "Fail",
                         Toast.LENGTH_SHORT).show();
 
             }
@@ -304,13 +302,13 @@ public class EditNoteActivity extends AppCompatActivity {
         storage.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.e("TATAassa", "PHOTO DELETED");
+                Log.e("TAGS", "PHOTO DELETED");
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("TATAassaaagsgas", "A INTRAT PE FAILURE LA DELETE");
+                Log.e("TAGF", "FAIL");
             }
         });
     }
@@ -320,7 +318,7 @@ public class EditNoteActivity extends AppCompatActivity {
         DatabaseReference postRef = FirebaseDatabase.getInstance()
                 .getReference("Notes/" + currentUserId + "/" + postKey);
         postRef.child("text").setValue(editText.getText().toString());
-        Log.e("GSFJS", "TEXT CHANGED");
+        Log.e("TAGCHANGED", "TEXT CHANGED");
     }
 
     @Override
@@ -333,7 +331,6 @@ public class EditNoteActivity extends AppCompatActivity {
                     .load(imageURI)
                     .centerCrop()
                     .into(imageView);
-            Log.e("TASSF", "IMAG GALLERY IMAGE URI: " + imageURI);
         }
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -343,7 +340,6 @@ public class EditNoteActivity extends AppCompatActivity {
                     .load(imageURI)
                     .centerCrop()
                     .into(imageView);
-            Log.e("TASSF", "CAMERA IMAGE URI: " + imageURI);
         }
     }
 }

@@ -46,5 +46,8 @@ dependencies {
     compile 'com.android.support:design:27.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
     compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile 'com.andrognito.patternlockview:patternlockview:1.0.0'
+    // Optional, for RxJava2 adapter
+    compile 'com.andrognito.patternlockview:patternlockview-reactive:1.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

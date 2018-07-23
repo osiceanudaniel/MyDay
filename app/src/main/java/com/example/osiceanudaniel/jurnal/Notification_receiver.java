@@ -18,7 +18,7 @@ public class Notification_receiver extends BroadcastReceiver{
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent i = new Intent(context, MainPageActivity.class);
-        // replace the old activty if it is running in the background
+        // replace the old activity if it is running in the background
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pI = PendingIntent.getActivity(context,

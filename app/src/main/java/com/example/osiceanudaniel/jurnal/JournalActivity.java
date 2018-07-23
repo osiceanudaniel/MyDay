@@ -259,6 +259,7 @@ public class JournalActivity extends AppCompatActivity {
 
 			}
 
+			@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 			@Override
 			public void onResults(Bundle results) {
 				ArrayList<String> result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -279,7 +280,13 @@ public class JournalActivity extends AppCompatActivity {
 									alert.show();
 									break;
 								case "command save":
-									Toast.makeText(getApplicationContext(),"save",Toast.LENGTH_LONG).show();
+									if(imageURI != null && (!TextUtils.isEmpty(canvas.getText().toString()))) {
+										thread.start();
+										saveNotes();
+									} else {
+										Toast.makeText(getApplicationContext(), getString(R.string.writeSomethigOrPickImage),
+												Toast.LENGTH_SHORT).show();
+									}
 									break;
 							}
 						}
@@ -361,7 +368,6 @@ public class JournalActivity extends AppCompatActivity {
         // show the date
         dateEditText.setText(dateString);
 
-        Log.e("TAHBSSA", "ON START CALLED");
     }
 
     @Override
@@ -376,7 +382,6 @@ public class JournalActivity extends AppCompatActivity {
         permissionStorage = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        Log.e("TAT", "ON RESUME CALLED");
     }
 
     @Override
@@ -427,7 +432,6 @@ public class JournalActivity extends AppCompatActivity {
                     .load(imageURI)
                     .centerCrop()
                     .into(displayPicture);
-            Log.e("TASSF", "IMAG GALLERY IMAGE URI: " + imageURI);
         }
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -437,7 +441,6 @@ public class JournalActivity extends AppCompatActivity {
                     .load(imageURI)
                     .centerCrop()
                     .into(displayPicture);
-            Log.e("TASSF", "CAMERA IMAGE URI: " + imageURI);
         }
     }
 
@@ -547,7 +550,6 @@ public class JournalActivity extends AppCompatActivity {
 			   }
 		   });
 	   } catch (Exception e) {
-       		Log.e("ASGAS","A intrat pe network");
 	   }
 	}
 
@@ -584,7 +586,7 @@ public class JournalActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
+                // Error
                 Log.i("TAG", "");
                 ex.printStackTrace();
             }

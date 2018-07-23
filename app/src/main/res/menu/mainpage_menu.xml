@@ -19,6 +19,11 @@
         app:showAsAction="never">
     </item>
 
+    <item android:id="@+id/setPatternMenu"
+        android:title="@string/setPatternMenu"
+        app:showAsAction="never">
+    </item>
+
     <item android:id="@+id/aboutMenu"
           android:title="@string/aboutMenu"
           app:showAsAction="never">

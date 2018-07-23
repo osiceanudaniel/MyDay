@@ -32,7 +32,7 @@
 
     <string name="listeningImageButtonTextDown">Se ascultă ...</string>
     <string name="menuClearText">Şterge textul</string>
-    <string name="canvasHintText">Scrie ce gândeşti aici ...</string>
+    <string name="canvasHintText">Textul va fi afişat aici ...</string>
     <string name="alertClearTextDialogMessage">Sunteţi sigur că vreţi să ştergeţi textul?</string>
     <string name="alertClearTextYesOption">Da</string>
     <string name="alertClearTextNoOption">Nu</string>
@@ -41,8 +41,8 @@
     <string name="toastPasswordTooShort">Parola este prea scurtă. Introduceţi cel puţin 8 caractere!</string>
     <string name="savingNoteMenuTitle">Salvare notiţă</string>
 
-    <string name="aboutTitle">Despre aplicaţie</string>
-    <string name="aboutText">Despre aplicaţie text!</string>
+    <string name="aboutTitle">despre</string>
+    <string name="aboutText">Versiunea 1.0</string>
     <string name="randomBgText">
         You dont want to become guilty of pla gia rism
         by letting someone else s words get inad vert
@@ -78,4 +78,21 @@
     <string name="noteDeletedSuccess">Notiţa a fost ştearsă cu succes!</string>
     <string name="noteModified">Notiţa a fost modificată!</string>
     <string name="loadingText">Se încarcă ...</string>
+    <string name="sortAscending">Ordonează după dată</string>
+    <string name="showWhenConnectedNote">Notiţa va fi afişată când vă veţi conecta la internet!</string>
+    <string name="notificationTitle">O zi plină?</string>
+    <string name="notificationMessage">Nu uita să scrii momentele importante petrecute astăzi!</string>
+    <string name="saveTimeString">Salvare</string>
+    <string name="setNotificationTime">Programează notificările</string>
+    <string name="notificationSet">Notificări activate</string>
+    <string name="patternSet">Model deblocare activat</string>
+    <string name="notificationNotSet">Notificări dezactivate</string>
+    <string name="patternNotSet">Model deblocare dezactivat</string>
+    <string name="notificationEnabled">Notificări activate. Vei primi notificări în fiecare zi la ora specificată!</string>
+    <string name="notificationDisabled">Notificări dezactivate</string>
+    <string name="wrongPattern">Model greşit</string>
+    <string name="patternCreated">Model setat</string>
+    <string name="textViewSetPattern">Setează model</string>
+    <string name="setPatternMenu">Setează model deblocare</string>
+    <string name="saveCommandAudio">Salvare</string>
 </resources>

@@ -98,7 +98,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         oldUsername = getIntent().getStringExtra("KEY_USERNAME");
         //set the cursor at the end of text
         usernameEdit.setSelection(usernameEdit.getText().length());
-        Log.e("YFAGSFK", "Picture path: " + getIntent().getStringExtra("KEY_PICUTRE"));
         Glide.with(getApplicationContext()).load(getIntent().getStringExtra("KEY_PICUTRE"))
                 .into(profilePicture);
         profilePictureURL = getIntent().getStringExtra("KEY_PICUTRE");
@@ -258,7 +257,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ProfileEditActivity.this, "Nu vrea",
+                Toast.makeText(ProfileEditActivity.this, "FAIL",
                         Toast.LENGTH_SHORT).show();
 
             }

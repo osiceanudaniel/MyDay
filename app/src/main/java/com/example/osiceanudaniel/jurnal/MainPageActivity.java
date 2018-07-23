@@ -196,7 +196,8 @@ public class MainPageActivity extends AppCompatActivity {
 
 	}
 
-	public static class NotesViewHolder extends RecyclerView.ViewHolder {
+
+    public static class NotesViewHolder extends RecyclerView.ViewHolder {
 
 	    View myView;
 	    ImageView picture;
@@ -253,8 +254,6 @@ public class MainPageActivity extends AppCompatActivity {
 		super.onStart();
 
         notesListRecyclerView.setLayoutManager(orderedByDateDescendingLayout);
-
-		Log.e("TASVJASVFJ", "ON START DE LA MAIN APELAT");
 
 		authUser.addAuthStateListener(authUserListener);
 
@@ -327,7 +326,6 @@ public class MainPageActivity extends AppCompatActivity {
                                 pBar.setVisibility(View.INVISIBLE);
                                 loadingText.setVisibility(View.INVISIBLE);
                             } else {
-                                Log.e("TAASad", "A INTRAT PE PRIMUL ELSE");
                                 noNotesTextView.setText(getString(R.string.noNotesText));
                                 notesListRecyclerView.setClickable(false);
                                 notesListRecyclerView.setLayoutFrozen(true);
@@ -335,7 +333,6 @@ public class MainPageActivity extends AppCompatActivity {
                                 loadingText.setVisibility(View.INVISIBLE);
                             }
                         } else {
-                            Log.e("TAASad", "A INTRAT PE ELSE 2");
                             noNotesTextView.setText(getString(R.string.noNotesText));
                             notesListRecyclerView.setClickable(false);
                             notesListRecyclerView.setLayoutFrozen(true);
@@ -374,6 +371,10 @@ public class MainPageActivity extends AppCompatActivity {
             case R.id.notificationMenu:
                 startActivity(new Intent(MainPageActivity.this,
                         SetNotificationTimeActivity.class));
+                break;
+            case R.id.setPatternMenu:
+                startActivity(new Intent(MainPageActivity.this,
+                        SetPatternActivity.class));
                 break;
             case R.id.aboutMenu:
                 displayAboutText();
@@ -414,7 +415,6 @@ public class MainPageActivity extends AppCompatActivity {
                     storage.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.e("tastaafs", "IMAGE SUCCESFULLY DELETED FOM NOTE");
                             DatabaseReference keyReference = FirebaseDatabase.getInstance()
                                     .getReference("Notes/" + currentUserId + "/" + postKye);
                             keyReference.getRef().removeValue();
@@ -481,7 +481,6 @@ public class MainPageActivity extends AppCompatActivity {
             calendar.set(Calendar.SECOND, 3);
             if (calendar.getTime().compareTo(new Date()) < 0) {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                Log.e("TTATAS", "SETAT PENTRU ZIUA URMATOARE");
             }
             // set the notification
             Intent i = new Intent(getApplicationContext(), Notification_receiver.class);
@@ -490,7 +489,6 @@ public class MainPageActivity extends AppCompatActivity {
             PendingIntent pI = PendingIntent.getBroadcast(getApplicationContext(),
                     ALARM_REQUEST, i, PendingIntent.FLAG_UPDATE_CURRENT);
            if (savedInstanceSta == null) {
-               Log.e("TTATAS", "A INTRAT SI PE AICI");
                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                // set the repeating alarm
                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, //triggered even in sleep mode
@@ -500,7 +498,6 @@ public class MainPageActivity extends AppCompatActivity {
            }
         } else {
             try {
-                Log.e("GASHJKF", "NOTIFICARI OPRITE");
                 Intent notificationIntent = new Intent(getApplicationContext(),
                         Notification_receiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
